@@ -18,15 +18,20 @@ class TaskEdit extends HookWidget {
     super.key,
   });
 
-  _onEditComplete() {
-    onEditComplete?.call(taskEntry);
-  }
-
   @override
   Widget build(BuildContext context) {
     final entryTitleEdit = useTextEditingController(text: taskEntry.title);
     final choosedPriority = useState(taskEntry.priority);
     final dueDate = useState(taskEntry.dueDate);
+    onSaveTask() {
+      final newEntry = taskEntry.copyWith(
+        title: entryTitleEdit.text,
+        priority: choosedPriority.value,
+        dueDate: dueDate.value,
+      );
+      onEditComplete?.call(newEntry);
+    }
+
     return Scaffold(
       /// app bar
       appBar: AppBar(
@@ -42,7 +47,7 @@ class TaskEdit extends HookWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => _onEditComplete(),
+            onPressed: () => onSaveTask(),
             child: const Text('СОХРАНИТЬ'),
           ),
         ],
