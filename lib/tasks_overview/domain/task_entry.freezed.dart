@@ -145,7 +145,7 @@ class __$$_TaskEntryCopyWithImpl<$Res>
 
 class _$_TaskEntry extends _TaskEntry {
   const _$_TaskEntry(
-      {required this.id,
+      {this.id = 0,
       required this.title,
       required this.priority,
       required this.status,
@@ -153,6 +153,7 @@ class _$_TaskEntry extends _TaskEntry {
       : super._();
 
   @override
+  @JsonKey()
   final int id;
   @override
   final String title;
@@ -194,7 +195,7 @@ class _$_TaskEntry extends _TaskEntry {
 
 abstract class _TaskEntry extends TaskEntry {
   const factory _TaskEntry(
-      {required final int id,
+      {final int id,
       required final String title,
       required final TaskPriority priority,
       required final TaskStatus status,

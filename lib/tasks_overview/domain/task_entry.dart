@@ -7,12 +7,20 @@ class TaskEntry with _$TaskEntry {
   const TaskEntry._();
 
   const factory TaskEntry({
-    required int id,
+    @Default(0) int id,
     required String title,
     required TaskPriority priority,
     required TaskStatus status,
     required DateTime? dueDate,
   }) = _TaskEntry;
+
+  factory TaskEntry.empty() => const _TaskEntry(
+        id: 0,
+        title: '',
+        priority: TaskPriority.none,
+        status: TaskStatus.open,
+        dueDate: null,
+      );
 }
 
 enum TaskPriority {
