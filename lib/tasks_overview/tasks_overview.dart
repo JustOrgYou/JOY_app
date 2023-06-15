@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_app/task_edit/task_edit.dart';
 import 'package:todo_app/tasks_overview/data/task_providers.dart';
 import 'package:todo_app/tasks_overview/domain/task_entry.dart';
+import 'package:todo_app/tasks_overview/domain/task_service.dart';
 import 'package:todo_app/tasks_overview/presentation/sliver_task_overview_bar.dart';
 import 'package:todo_app/tasks_overview/presentation/task_overview_card.dart';
 
@@ -11,12 +12,37 @@ class TasksOverview extends ConsumerWidget {
     super.key,
   });
 
-  void _onFabAddNewPressed() {
-    print('fab add new');
+  Future<void> _createNewTaskInEditor(WidgetRef ref) async {
+    final taskEntryService = ref.read(taskEntryServiceProvider);
+    final newEntry = await taskEntryService.createTaskEntry();
+
+    /// As far as I understand, context is used synchronously, so it fake alerts.
+    if (!ref.context.mounted) return;
+    // ignore: use_build_context_synchronously
+    Navigator.push(
+      ref.context,
+      MaterialPageRoute(
+        builder: (context) => TaskEdit(
+          taskEntry: newEntry,
+          onEditComplete: (updatedEntry) async {
+            await taskEntryService.updateTaskEntry(
+              updatedEntry,
+            );
+            // ignore: use_build_context_synchronously
+            if (!context.mounted) return;
+            Navigator.pop(ref.context);
+          },
+        ),
+      ),
+    );
   }
 
-  void _onAddNewButtonPressed() {
-    print('add new');
+  void _onFabAddNewPressed(WidgetRef ref) {
+    _createNewTaskInEditor(ref);
+  }
+
+  void _onAddNewButtonPressed(WidgetRef ref) {
+    _createNewTaskInEditor(ref);
   }
 
   void _onToggleVisibilityPressed(WidgetRef ref) {
@@ -54,7 +80,7 @@ class TasksOverview extends ConsumerWidget {
     final areDoneTasksVisible = ref.watch(doneTasksVisibilityProvider);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: _onFabAddNewPressed,
+        onPressed: () => _onFabAddNewPressed(ref),
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(
           Icons.add,
@@ -130,8 +156,9 @@ class TasksOverview extends ConsumerWidget {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: TextButton(
-                                    onPressed: _onAddNewButtonPressed,
-                                    child: const Text('Load more'),
+                                    onPressed: () =>
+                                        _onAddNewButtonPressed(ref),
+                                    child: const Text('Новое'),
                                   ),
                                 ),
                               ),
