@@ -25,11 +25,11 @@ class TaskOverviewCard extends StatefulWidget {
 
 class _TaskOverviewCardState extends State<TaskOverviewCard>
     with SingleTickerProviderStateMixin {
-  final _menuOpenThreshold = 100.0;
-  final _actionTreshold = 200.0;
   late final AnimationController _menuAnimationController;
   late final Animation<double> _menuAnimation;
   late final Tween<double> _menuTween;
+  double _menuOpenThreshold = 100.0;
+  double _actionTreshold = 200.0;
   double _dragDisplacement = 0;
 
   @override
@@ -84,14 +84,18 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
     final double animationEnd;
     if (_dragDisplacement < 0) {
       animationBegin = _dragDisplacement;
-      if (_dragDisplacement.abs() > _menuOpenThreshold) {
+      if (_dragDisplacement.abs() > _actionTreshold) {
+        animationEnd = 0;
+      } else if (_dragDisplacement.abs() > _menuOpenThreshold) {
         animationEnd = -_menuOpenThreshold;
       } else {
         animationEnd = 0;
       }
     } else {
       animationEnd = _dragDisplacement;
-      if (_dragDisplacement.abs() > _menuOpenThreshold) {
+      if (_dragDisplacement.abs() > _actionTreshold) {
+        animationBegin = 0;
+      } else if (_dragDisplacement.abs() > _menuOpenThreshold) {
         animationBegin = _menuOpenThreshold;
       } else {
         animationBegin = 0;
@@ -110,6 +114,8 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
 
   @override
   Widget build(BuildContext context) {
+    _actionTreshold = MediaQuery.of(context).size.width / 2.5;
+    _menuOpenThreshold = MediaQuery.of(context).size.width / 8;
     return InkWell(
       onTap: () => widget.onPressed?.call(widget.taskEntry),
       child: GestureDetector(
