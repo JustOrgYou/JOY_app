@@ -83,7 +83,9 @@ class TasksOverview extends ConsumerWidget {
     final taskEntryService = ref.read(taskEntryServiceProvider);
     taskEntryService.updateTaskEntry(
       taskEntry.copyWith(
-        status: TaskStatus.done,
+        status: taskEntry.status == TaskStatus.done
+            ? TaskStatus.open
+            : TaskStatus.done,
       ),
     );
   }
