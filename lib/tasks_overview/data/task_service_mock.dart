@@ -16,14 +16,19 @@ class TaskEntryServiceMock implements TaskEntryService {
   );
   final _taskEntriesStreamController = StreamController<List<TaskEntry>>();
 
-  TaskEntryServiceMock() {
+  /// mock any real work.
+  final int delay;
+
+  TaskEntryServiceMock({
+    this.delay = 200,
+  }) {
     _taskEntriesStreamController.add(_taskEntries);
   }
 
   @override
   Future<List<TaskEntry>> getTaskEntries() async {
     await Future.delayed(
-      const Duration(seconds: 2),
+      Duration(milliseconds: delay),
     );
     return _taskEntries;
   }
@@ -31,7 +36,7 @@ class TaskEntryServiceMock implements TaskEntryService {
   @override
   Future<void> addTaskEntry(TaskEntry taskEntry) async {
     await Future.delayed(
-      const Duration(seconds: 2),
+      Duration(milliseconds: delay),
     );
     _taskEntries.add(
       taskEntry.copyWith(
@@ -43,7 +48,7 @@ class TaskEntryServiceMock implements TaskEntryService {
 
   @override
   Future<void> updateTaskEntry(TaskEntry taskEntry) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(Duration(milliseconds: delay));
     final taskEntryIndex = _taskEntries.indexWhere(
       (entry) => entry.id == taskEntry.id,
     );
@@ -53,7 +58,7 @@ class TaskEntryServiceMock implements TaskEntryService {
 
   @override
   Future<void> deleteTaskEntry(int id) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: delay));
     _taskEntries.removeWhere((taskEntry) => taskEntry.id == id);
     _taskEntriesStreamController.add(_taskEntries);
   }
