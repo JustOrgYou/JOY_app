@@ -84,7 +84,8 @@ class TaskEdit extends HookWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TaskEditDeleteButton(
-                  onDelete: () => onDelete?.call(taskEntry),
+                  onDelete:
+                      onDelete == null ? null : () => onDelete?.call(taskEntry),
                 ),
               ),
             ),

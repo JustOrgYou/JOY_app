@@ -10,7 +10,7 @@ class TaskEditDeleteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-      onPressed: () => onDelete?.call(),
+      onPressed: onDelete,
       icon: const Icon(Icons.delete),
       label: const Text('Удалить'),
       style: TextButton.styleFrom(
