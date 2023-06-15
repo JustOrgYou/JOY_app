@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_app/task_edit/task_edit.dart';
 import 'package:todo_app/tasks_overview/data/task_providers.dart';
 import 'package:todo_app/tasks_overview/domain/task_entry.dart';
-import 'package:todo_app/tasks_overview/domain/task_service.dart';
 import 'package:todo_app/tasks_overview/presentation/sliver_task_overview_bar.dart';
 import 'package:todo_app/tasks_overview/presentation/task_overview_card.dart';
 
@@ -14,11 +13,31 @@ class TasksOverview extends ConsumerWidget {
 
   Future<void> _createNewTaskInEditor(WidgetRef ref) async {
     final taskEntryService = ref.read(taskEntryServiceProvider);
-    final newEntry = await taskEntryService.createTaskEntry();
+    final newEntry = TaskEntry.empty();
 
-    /// As far as I understand, context is used synchronously, so it fake alerts.
     if (!ref.context.mounted) return;
-    // ignore: use_build_context_synchronously
+    Navigator.push(
+      ref.context,
+      MaterialPageRoute(
+        builder: (context) => TaskEdit(
+          taskEntry: newEntry,
+          onEditComplete: (updatedEntry) async {
+            await taskEntryService.addTaskEntry(
+              updatedEntry,
+            );
+            // ignore: use_build_context_synchronously
+            if (!context.mounted) return;
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> _editTaskInEditor(WidgetRef ref, TaskEntry newEntry) async {
+    final taskEntryService = ref.read(taskEntryServiceProvider);
+
+    if (!ref.context.mounted) return;
     Navigator.push(
       ref.context,
       MaterialPageRoute(
@@ -30,7 +49,7 @@ class TasksOverview extends ConsumerWidget {
             );
             // ignore: use_build_context_synchronously
             if (!context.mounted) return;
-            Navigator.pop(ref.context);
+            Navigator.pop(context);
           },
         ),
       ),
@@ -50,29 +69,46 @@ class TasksOverview extends ConsumerWidget {
     doneTasksNotifier.state = !doneTasksNotifier.state;
   }
 
-  void _onTaskCardPressed(BuildContext context, TaskEntry taskEntry) {
-    if (!context.mounted) return;
+  void _onTaskCardPressed(WidgetRef ref, TaskEntry taskEntry) {
+    final taskEntryService = ref.read(taskEntryServiceProvider);
+
+    if (!ref.context.mounted) return;
     Navigator.push(
-      context,
+      ref.context,
       MaterialPageRoute(
         builder: (context) => TaskEdit(
           taskEntry: taskEntry,
+          onEditComplete: (updatedEntry) async {
+            await taskEntryService.updateTaskEntry(
+              updatedEntry,
+            );
+            // ignore: use_build_context_synchronously
+            if (!context.mounted) return;
+            Navigator.pop(context);
+          },
+          onDelete: (deletedEntry) {
+            _onTaskCardDeletePressed(ref, deletedEntry);
+            if (!context.mounted) return;
+            Navigator.pop(context);
+          },
         ),
       ),
     );
   }
 
-  void _onTaskCardDeletePressed(TaskEntry taskEntry) {
-    print('delete');
-    print(taskEntry);
+  void _onTaskCardDeletePressed(WidgetRef ref, TaskEntry taskEntry) {
+    final taskEntryService = ref.read(taskEntryServiceProvider);
+    taskEntryService.deleteTaskEntry(taskEntry.id);
   }
 
-  void _onTaskCardDonePressed(TaskEntry taskEntry) {
-    print('done');
-    print(taskEntry);
+  void _onTaskCardDonePressed(WidgetRef ref, TaskEntry taskEntry) {
+    final taskEntryService = ref.read(taskEntryServiceProvider);
+    taskEntryService.updateTaskEntry(
+      taskEntry.copyWith(
+        status: TaskStatus.done,
+      ),
+    );
   }
-
-  void _onTaskCardInfoPressed(TaskEntry taskEntry) {}
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -140,13 +176,24 @@ class TasksOverview extends ConsumerWidget {
                                 .map<Widget>(
                                   (task) => TaskOverviewCard(
                                     taskEntry: task,
-                                    onDelete: _onTaskCardDeletePressed,
-                                    onDone: _onTaskCardDonePressed,
-                                    onPressed: (entry) => _onTaskCardPressed(
-                                      context,
+                                    onDelete: (entry) =>
+                                        _onTaskCardDeletePressed(
+                                      ref,
                                       entry,
                                     ),
-                                    onInfoPressed: _onTaskCardInfoPressed,
+                                    onDone: (entry) => _onTaskCardDonePressed(
+                                      ref,
+                                      entry,
+                                    ),
+                                    onPressed: (entry) => _onTaskCardPressed(
+                                      ref,
+                                      entry,
+                                    ),
+                                    onInfoPressed: (entry) =>
+                                        _onTaskCardPressed(
+                                      ref,
+                                      entry,
+                                    ),
                                   ),
                                 )
                                 .toList()
