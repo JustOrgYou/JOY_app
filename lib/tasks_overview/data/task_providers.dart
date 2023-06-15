@@ -10,3 +10,4 @@ final taskEntryServiceProvider = Provider<TaskEntryService>(
 final taskEntryStreamProvider = StreamProvider.autoDispose<List<TaskEntry>>(
   (ref) => ref.watch(taskEntryServiceProvider).getTaskEntriesStream(),
 );
+final doneTasksVisibilityProvider = StateProvider<bool>((ref) => true);

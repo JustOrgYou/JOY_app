@@ -19,8 +19,9 @@ class TasksOverview extends ConsumerWidget {
     print('add new');
   }
 
-  void _onToggleVisibilityPressed() {
-    print('toggle visibility');
+  void _onToggleVisibilityPressed(WidgetRef ref) {
+    final doneTasksNotifier = ref.read(doneTasksVisibilityProvider.notifier);
+    doneTasksNotifier.state = !doneTasksNotifier.state;
   }
 
   void _onTaskCardPressed(BuildContext context, TaskEntry taskEntry) {
@@ -50,6 +51,7 @@ class TasksOverview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final taskEntriesSnapshot = ref.watch(taskEntryStreamProvider);
+    final areDoneTasksVisible = ref.watch(doneTasksVisibilityProvider);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: _onFabAddNewPressed,
@@ -83,8 +85,9 @@ class TasksOverview extends ConsumerWidget {
                 /// appbar
                 SliverTaskOverviewBar(
                   doneTasksCount: 3,
-                  areDoneTasksVisible: true,
-                  toggleVisibilityCallback: _onToggleVisibilityPressed,
+                  areDoneTasksVisible: areDoneTasksVisible,
+                  toggleVisibilityCallback: () =>
+                      _onToggleVisibilityPressed(ref),
                 ),
 
                 /// task cards and "add new" button
@@ -101,6 +104,13 @@ class TasksOverview extends ConsumerWidget {
 
                             /// Task Cards
                             taskEntries
+                                .where(
+                                  (task) =>
+                                      // TODO(me): google does dart lazy evaluate boolean expressions?
+                                      // if it is so, then this speedup when all tasks are visible
+                                      areDoneTasksVisible ||
+                                      task.status != TaskStatus.done,
+                                )
                                 .map<Widget>(
                                   (task) => TaskOverviewCard(
                                     taskEntry: task,
