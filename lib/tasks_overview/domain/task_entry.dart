@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'task_entry.freezed.dart';
 
 @freezed
-class TaskEntry {
+class TaskEntry with _$TaskEntry {
   const TaskEntry._();
 
   const factory TaskEntry({
