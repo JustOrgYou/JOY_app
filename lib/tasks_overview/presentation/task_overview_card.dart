@@ -46,7 +46,6 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
     _menuAnimation = _menuTween.animate(_menuAnimationController)
       ..addListener(() {
         _updateDisplacement(_menuAnimation.value);
-        print(1);
       });
   }
 
@@ -168,17 +167,40 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
                 color: Theme.of(context).colorScheme.surface,
                 child: Row(
                   children: [
-                    Checkbox(
-                      value: widget.taskEntry.status == TaskStatus.done,
+                    Theme(
+                      data: Theme.of(context).copyWith(
+                        unselectedWidgetColor:
+                            widget.taskEntry.priority == TaskPriority.high
+                                ? Theme.of(context).colorScheme.error
+                                : null,
+                      ),
+                      child: Checkbox(
+                        value: widget.taskEntry.status == TaskStatus.done,
 
-                      // TODO: make code abstract from only two states.
-                      onChanged: (isDone) => widget.onStatusChanged?.call(
-                        widget.taskEntry,
-                        isDone! ? TaskStatus.done : TaskStatus.open,
+                        // TODO: make code abstract from only two states.
+                        onChanged: (isDone) => widget.onStatusChanged?.call(
+                          widget.taskEntry,
+                          isDone! ? TaskStatus.done : TaskStatus.open,
+                        ),
                       ),
                     ),
+                    if (widget.taskEntry.priority == TaskPriority.high)
+                      const Text('❗'),
+                    if (widget.taskEntry.priority == TaskPriority.low)
+                      const Icon(
+                        Icons.arrow_downward_outlined,
+                        color: Colors.grey,
+                      ),
                     Expanded(
-                      child: Text(widget.taskEntry.title),
+                      child: Text(
+                        widget.taskEntry.title,
+                        style: widget.taskEntry.status == TaskStatus.done
+                            ? Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.grey,
+                                )
+                            : Theme.of(context).textTheme.bodyMedium,
+                      ),
                     ),
                     IconButton(
                       onPressed: () =>
@@ -192,30 +214,6 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
           ],
         ),
       ),
-      // Stack(
-      //   children: [
-      //     /// underlay with icons and colors
-      //     Positioned.fill(
-      //       child: Row(
-      //         crossAxisAlignment: CrossAxisAlignment.stretch,
-      //         children: [
-      //           Expanded(
-      //             child: Container(
-      //               color: Theme.of(context).colorScheme.secondary,
-      //             ),
-      //           ),
-      //           Expanded(
-      //             child: Container(
-      //               color: Theme.of(context).colorScheme.tertiary,
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-
-      //     /// card content
-      //   ],
-      // ),
     );
   }
 }
