@@ -34,28 +34,6 @@ class TasksOverview extends ConsumerWidget {
     );
   }
 
-  Future<void> _editTaskInEditor(WidgetRef ref, TaskEntry newEntry) async {
-    final taskEntryService = ref.read(taskEntryServiceProvider);
-
-    if (!ref.context.mounted) return;
-    Navigator.push(
-      ref.context,
-      MaterialPageRoute(
-        builder: (context) => TaskEdit(
-          taskEntry: newEntry,
-          onEditComplete: (updatedEntry) async {
-            await taskEntryService.updateTaskEntry(
-              updatedEntry,
-            );
-            // ignore: use_build_context_synchronously
-            if (!context.mounted) return;
-            Navigator.pop(context);
-          },
-        ),
-      ),
-    );
-  }
-
   void _onFabAddNewPressed(WidgetRef ref) {
     _createNewTaskInEditor(ref);
   }
