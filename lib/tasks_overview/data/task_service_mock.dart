@@ -33,7 +33,11 @@ class TaskEntryServiceMock implements TaskEntryService {
     await Future.delayed(
       const Duration(seconds: 2),
     );
-    _taskEntries.add(taskEntry);
+    _taskEntries.add(
+      taskEntry.copyWith(
+        id: _taskEntries.last.id + 1,
+      ),
+    );
     _taskEntriesStreamController.add(_taskEntries);
   }
 
