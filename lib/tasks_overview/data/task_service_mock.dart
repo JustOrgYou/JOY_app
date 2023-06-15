@@ -43,6 +43,7 @@ class TaskEntryServiceMock implements TaskEntryService {
       (entry) => entry.id == taskEntry.id,
     );
     _taskEntries[taskEntryIndex] = taskEntry;
+    _taskEntriesStreamController.add(_taskEntries);
   }
 
   @override
@@ -55,5 +56,20 @@ class TaskEntryServiceMock implements TaskEntryService {
   @override
   Stream<List<TaskEntry>> getTaskEntriesStream() {
     return _taskEntriesStreamController.stream;
+  }
+
+  @override
+  Future<TaskEntry> createTaskEntry() {
+    final newEntry = TaskEntry(
+      id: _taskEntries.last.id + 1,
+      title: '',
+      status: TaskStatus.open,
+      priority: TaskPriority.none,
+      dueDate: null,
+    );
+    _taskEntries.add(newEntry);
+    _taskEntriesStreamController.add(_taskEntries);
+
+    return Future.value(newEntry);
   }
 }
