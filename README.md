@@ -15,3 +15,4 @@ Flutter app to manage your todos.
 ![edit](./docs/v1-edit-screen.png)
 
 ## Download links
+[V1 app](https://github.com/Demezy/todo_app/releases/download/untagged-3ce9b9b2c5f4b54647ff/app-release.apk)
