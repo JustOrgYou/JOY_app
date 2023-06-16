@@ -1,16 +1,17 @@
 # todo_app
 
-A new Flutter project.
+Flutter app to manage your todos.
 
-## Getting Started
+## Stack
 
-This project is a starting point for a Flutter application.
+- riverpod
+- flutter_hooks
+- freezed
 
-A few resources to get you started if this is your first Flutter project:
+## V1 Gallery 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![demo](./docs/v1-demo.gif)
+![overview](./docs/v1-overview-screen.png)
+![edit](./docs/v1-edit-screen.png)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Download links
