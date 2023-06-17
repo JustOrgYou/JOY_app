@@ -11,7 +11,10 @@ Flutter app to manage your todos.
 ## Features
 - add tasks
 - hide done tasks
-- animation of swipe
+- swipes
+  - animation
+  - open menu via short swipe
+  - perform action via long swipe
 - clean architecture!
 - app icon
 
