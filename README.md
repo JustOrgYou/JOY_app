@@ -8,6 +8,13 @@ Flutter app to manage your todos.
 - flutter_hooks
 - freezed
 
+## Features
+- add tasks
+- hide done tasks
+- animation of swipe
+- clean architecture!
+- app icon
+
 ## V1 Gallery 
 
 ![demo](./docs/v1-demo.gif)
