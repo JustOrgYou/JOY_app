@@ -2,6 +2,11 @@
 
 Flutter app to manage your todos.
 
+# README
+
+For review use this merge requsts. But, README is up to date in master branch
+v1 - https://github.com/Demezy/todo_app/pull/1
+
 ## Stack
 
 - riverpod
@@ -26,3 +31,4 @@ Flutter app to manage your todos.
 
 ## Download links
 [V1 app](https://github.com/Demezy/todo_app/releases/download/untagged-3ce9b9b2c5f4b54647ff/app-release.apk)
+
