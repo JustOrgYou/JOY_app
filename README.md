@@ -5,6 +5,7 @@ Flutter app to manage your todos.
 # README
 
 For review use this merge requsts. But, README is up to date in master branch
+v2 - 
 v1 - https://github.com/Demezy/todo_app/pull/1
 
 ## Stack
