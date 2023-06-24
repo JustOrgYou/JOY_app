@@ -1,9 +1,11 @@
 import 'dart:async';
 
-import 'package:todo_app/tasks_overview/domain/task_entry.dart';
-import 'package:todo_app/tasks_overview/domain/task_service.dart';
+import 'package:todo_app/tasks_service/domain/task_entry.dart';
+import 'package:todo_app/tasks_service/domain/task_service.dart';
 
 class TaskEntryServiceMock implements TaskEntryService {
+  /// mock any real work.
+  final int delay;
   final _taskEntries = List<TaskEntry>.generate(
     100,
     (index) => TaskEntry(
@@ -16,9 +18,6 @@ class TaskEntryServiceMock implements TaskEntryService {
   );
   final _taskEntriesStreamController = StreamController<List<TaskEntry>>();
 
-  /// mock any real work.
-  final int delay;
-
   TaskEntryServiceMock({
     this.delay = 200,
   }) {
@@ -27,7 +26,7 @@ class TaskEntryServiceMock implements TaskEntryService {
 
   @override
   Future<List<TaskEntry>> getTaskEntries() async {
-    await Future.delayed(
+    await Future<void>.delayed(
       Duration(milliseconds: delay),
     );
     return _taskEntries;
@@ -35,7 +34,7 @@ class TaskEntryServiceMock implements TaskEntryService {
 
   @override
   Future<void> addTaskEntry(TaskEntry taskEntry) async {
-    await Future.delayed(
+    await Future<void>.delayed(
       Duration(milliseconds: delay),
     );
     _taskEntries.add(
@@ -48,7 +47,7 @@ class TaskEntryServiceMock implements TaskEntryService {
 
   @override
   Future<void> updateTaskEntry(TaskEntry taskEntry) async {
-    await Future.delayed(Duration(milliseconds: delay));
+    await Future<void>.delayed(Duration(milliseconds: delay));
     final taskEntryIndex = _taskEntries.indexWhere(
       (entry) => entry.id == taskEntry.id,
     );
@@ -58,7 +57,7 @@ class TaskEntryServiceMock implements TaskEntryService {
 
   @override
   Future<void> deleteTaskEntry(int id) async {
-    await Future.delayed(Duration(milliseconds: delay));
+    await Future<void>.delayed(Duration(milliseconds: delay));
     _taskEntries.removeWhere((taskEntry) => taskEntry.id == id);
     _taskEntriesStreamController.add(_taskEntries);
   }

@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_app/task_edit/task_edit.dart';
-import 'package:todo_app/tasks_overview/data/task_providers.dart';
-import 'package:todo_app/tasks_overview/domain/task_entry.dart';
 import 'package:todo_app/tasks_overview/presentation/sliver_task_overview_bar.dart';
 import 'package:todo_app/tasks_overview/presentation/task_overview_card.dart';
+import 'package:todo_app/tasks_service/data/task_providers.dart';
+import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 class TasksOverview extends ConsumerWidget {
   const TasksOverview({
@@ -16,7 +18,7 @@ class TasksOverview extends ConsumerWidget {
     final newEntry = TaskEntry.empty();
 
     if (!ref.context.mounted) return;
-    Navigator.push(
+    await Navigator.push<void>(
       ref.context,
       MaterialPageRoute(
         builder: (context) => TaskEdit(
@@ -51,7 +53,7 @@ class TasksOverview extends ConsumerWidget {
     final taskEntryService = ref.read(taskEntryServiceProvider);
 
     if (!ref.context.mounted) return;
-    Navigator.push(
+    Navigator.push<void>(
       ref.context,
       MaterialPageRoute(
         builder: (context) => TaskEdit(
@@ -75,19 +77,15 @@ class TasksOverview extends ConsumerWidget {
   }
 
   void _onTaskCardDeletePressed(WidgetRef ref, TaskEntry taskEntry) {
-    final taskEntryService = ref.read(taskEntryServiceProvider);
-    taskEntryService.deleteTaskEntry(taskEntry.id);
+    ref.read(taskEntryServiceProvider).deleteTaskEntry(taskEntry.id);
   }
 
   void _onTaskCardDonePressed(WidgetRef ref, TaskEntry taskEntry) {
-    final taskEntryService = ref.read(taskEntryServiceProvider);
-    taskEntryService.updateTaskEntry(
-      taskEntry.copyWith(
-        status: taskEntry.status == TaskStatus.done
-            ? TaskStatus.open
-            : TaskStatus.done,
-      ),
-    );
+    ref.read(taskEntryServiceProvider).updateTaskEntry(
+          taskEntry.copyWith(
+            status: taskEntry.status == TaskStatus.done ? TaskStatus.open : TaskStatus.done,
+          ),
+        );
   }
 
   @override
@@ -105,7 +103,7 @@ class TasksOverview extends ConsumerWidget {
       ),
       body: taskEntriesSnapshot.when(
         /// error display
-        error: (Object error, StackTrace stackTrace) => Center(
+        error: (error, stackTrace) => Center(
           child: Text('Error: $error'),
         ),
 
@@ -115,7 +113,7 @@ class TasksOverview extends ConsumerWidget {
         ),
 
         /// ready tasks display
-        data: (List<TaskEntry> taskEntries) => Padding(
+        data: (taskEntries) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: DecoratedBox(
             decoration: BoxDecoration(
@@ -128,8 +126,7 @@ class TasksOverview extends ConsumerWidget {
                 SliverTaskOverviewBar(
                   doneTasksCount: 3,
                   areDoneTasksVisible: areDoneTasksVisible,
-                  toggleVisibilityCallback: () =>
-                      _onToggleVisibilityPressed(ref),
+                  toggleVisibilityCallback: () => _onToggleVisibilityPressed(ref),
                 ),
 
                 /// task cards and "add new" button
@@ -147,17 +144,12 @@ class TasksOverview extends ConsumerWidget {
                             /// Task Cards
                             taskEntries
                                 .where(
-                                  (task) =>
-                                      // TODO(me): google does dart lazy evaluate boolean expressions?
-                                      // if it is so, then this speedup when all tasks are visible
-                                      areDoneTasksVisible ||
-                                      task.status != TaskStatus.done,
+                                  (task) => areDoneTasksVisible || task.status != TaskStatus.done,
                                 )
                                 .map<Widget>(
                                   (task) => TaskOverviewCard(
                                     taskEntry: task,
-                                    onDelete: (entry) =>
-                                        _onTaskCardDeletePressed(
+                                    onDelete: (entry) => _onTaskCardDeletePressed(
                                       ref,
                                       entry,
                                     ),
@@ -169,8 +161,7 @@ class TasksOverview extends ConsumerWidget {
                                       ref,
                                       entry,
                                     ),
-                                    onInfoPressed: (entry) =>
-                                        _onTaskCardPressed(
+                                    onInfoPressed: (entry) => _onTaskCardPressed(
                                       ref,
                                       entry,
                                     ),
@@ -183,8 +174,7 @@ class TasksOverview extends ConsumerWidget {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: TextButton(
-                                    onPressed: () =>
-                                        _onAddNewButtonPressed(ref),
+                                    onPressed: () => _onAddNewButtonPressed(ref),
                                     child: const Text('Новое'),
                                   ),
                                 ),

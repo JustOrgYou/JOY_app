@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/tasks_overview/domain/task_entry.dart';
+import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 class TaskOverviewCard extends StatefulWidget {
-  final TaskEntry taskEntry;
-  final void Function(TaskEntry)? onDelete;
-  final void Function(TaskEntry)? onDone;
-  final void Function(TaskEntry)? onPressed;
-  final void Function(TaskEntry)? onInfoPressed;
-  final void Function(TaskEntry, TaskStatus)? onStatusChanged;
-
   const TaskOverviewCard({
     required this.taskEntry,
     this.onDelete,
@@ -19,12 +12,18 @@ class TaskOverviewCard extends StatefulWidget {
     super.key,
   });
 
+  final TaskEntry taskEntry;
+  final void Function(TaskEntry)? onDelete;
+  final void Function(TaskEntry)? onDone;
+  final void Function(TaskEntry)? onPressed;
+  final void Function(TaskEntry)? onInfoPressed;
+  final void Function(TaskEntry, TaskStatus)? onStatusChanged;
+
   @override
   State<TaskOverviewCard> createState() => _TaskOverviewCardState();
 }
 
-class _TaskOverviewCardState extends State<TaskOverviewCard>
-    with SingleTickerProviderStateMixin {
+class _TaskOverviewCardState extends State<TaskOverviewCard> with SingleTickerProviderStateMixin {
   late final AnimationController _menuAnimationController;
   late final Animation<double> _menuAnimation;
   late final Tween<double> _menuTween;
@@ -49,12 +48,6 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
       });
   }
 
-  @override
-  void dispose() {
-    _menuAnimationController.dispose();
-    super.dispose();
-  }
-
   void _updateDisplacement(double displacement) {
     setState(() {
       _dragDisplacement = displacement;
@@ -68,7 +61,7 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
     _menuAnimationController.stop();
   }
 
-  void _onDragEnd(DragEndDetails details) {
+  void _onDragEnd() {
     /// apply action
     if (_dragDisplacement.abs() > _actionTreshold) {
       if (_dragDisplacement > 0) {
@@ -103,13 +96,20 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
     }
 
     /// run return animation
-    _menuTween.begin = animationBegin;
-    _menuTween.end = animationEnd;
+    _menuTween
+      ..begin = animationBegin
+      ..end = animationEnd;
     if (_dragDisplacement < 0) {
       _menuAnimationController.forward(from: _dragDisplacement);
     } else {
       _menuAnimationController.reverse(from: _dragDisplacement);
     }
+  }
+
+  @override
+  void dispose() {
+    _menuAnimationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -120,7 +120,7 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
       onTap: () => widget.onPressed?.call(widget.taskEntry),
       child: GestureDetector(
         onHorizontalDragUpdate: _onDragUpdate,
-        onHorizontalDragEnd: _onDragEnd,
+        onHorizontalDragEnd: (_) => _onDragEnd(),
         child: Stack(
           children: [
             /// left menu
@@ -158,8 +158,7 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
                           Icons.delete,
                           color: Theme.of(context).colorScheme.onError,
                         ),
-                        onPressed: () =>
-                            widget.onDelete?.call(widget.taskEntry),
+                        onPressed: () => widget.onDelete?.call(widget.taskEntry),
                       ),
                     ),
                   ),
@@ -169,16 +168,15 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
             /// card content
             Transform.translate(
               offset: Offset(_dragDisplacement, 0),
-              child: ColoredBox(
+              child: Container(
+                width: double.infinity,
                 color: Theme.of(context).colorScheme.surface,
                 child: Row(
                   children: [
                     Theme(
                       data: Theme.of(context).copyWith(
                         unselectedWidgetColor:
-                            widget.taskEntry.priority == TaskPriority.high
-                                ? Theme.of(context).colorScheme.error
-                                : null,
+                            widget.taskEntry.priority == TaskPriority.high ? Theme.of(context).colorScheme.error : null,
                       ),
                       child: Checkbox(
                         value: widget.taskEntry.status == TaskStatus.done,
@@ -190,8 +188,7 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
                         ),
                       ),
                     ),
-                    if (widget.taskEntry.priority == TaskPriority.high)
-                      const Text('❗'),
+                    if (widget.taskEntry.priority == TaskPriority.high) const Text('❗'),
                     if (widget.taskEntry.priority == TaskPriority.low)
                       const Icon(
                         Icons.arrow_downward_outlined,
@@ -209,8 +206,7 @@ class _TaskOverviewCardState extends State<TaskOverviewCard>
                       ),
                     ),
                     IconButton(
-                      onPressed: () =>
-                          widget.onInfoPressed?.call(widget.taskEntry),
+                      onPressed: () => widget.onInfoPressed?.call(widget.taskEntry),
                       icon: const Icon(Icons.info_outline),
                     ),
                   ],
