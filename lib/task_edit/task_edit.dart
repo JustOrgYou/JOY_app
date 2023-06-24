@@ -5,7 +5,7 @@ import 'package:todo_app/task_edit/presentation/task_edit_due_date_widget.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_priority_dropdown.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_separator_widget.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_title_editor.dart';
-import 'package:todo_app/tasks_overview/domain/task_entry.dart';
+import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 class TaskEdit extends HookWidget {
   final TaskEntry taskEntry;
@@ -84,8 +84,7 @@ class TaskEdit extends HookWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TaskEditDeleteButton(
-                  onDelete:
-                      onDelete == null ? null : () => onDelete?.call(taskEntry),
+                  onDelete: onDelete == null ? null : () => onDelete?.call(taskEntry),
                 ),
               ),
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/task_edit/utils/task_priority_to_color_extension.dart';
 import 'package:todo_app/task_edit/utils/task_priority_to_human_string_extension.dart';
-import 'package:todo_app/tasks_overview/domain/task_entry.dart';
+import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 class TaskEditPriorityDropdown extends StatelessWidget {
   final ValueNotifier<TaskPriority> choosedPriority;

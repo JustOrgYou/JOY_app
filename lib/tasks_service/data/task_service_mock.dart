@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:todo_app/tasks_overview/domain/task_entry.dart';
-import 'package:todo_app/tasks_overview/domain/task_service.dart';
+import '../domain/task_entry.dart';
+import '../domain/task_service.dart';
 
 class TaskEntryServiceMock implements TaskEntryService {
   final _taskEntries = List<TaskEntry>.generate(
