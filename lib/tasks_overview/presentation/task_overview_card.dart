@@ -23,7 +23,8 @@ class TaskOverviewCard extends StatefulWidget {
   State<TaskOverviewCard> createState() => _TaskOverviewCardState();
 }
 
-class _TaskOverviewCardState extends State<TaskOverviewCard> with SingleTickerProviderStateMixin {
+class _TaskOverviewCardState extends State<TaskOverviewCard>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _menuAnimationController;
   late final Animation<double> _menuAnimation;
   late final Tween<double> _menuTween;
@@ -158,7 +159,8 @@ class _TaskOverviewCardState extends State<TaskOverviewCard> with SingleTickerPr
                           Icons.delete,
                           color: Theme.of(context).colorScheme.onError,
                         ),
-                        onPressed: () => widget.onDelete?.call(widget.taskEntry),
+                        onPressed: () =>
+                            widget.onDelete?.call(widget.taskEntry),
                       ),
                     ),
                   ),
@@ -176,7 +178,9 @@ class _TaskOverviewCardState extends State<TaskOverviewCard> with SingleTickerPr
                     Theme(
                       data: Theme.of(context).copyWith(
                         unselectedWidgetColor:
-                            widget.taskEntry.priority == TaskPriority.high ? Theme.of(context).colorScheme.error : null,
+                            widget.taskEntry.priority == TaskPriority.high
+                                ? Theme.of(context).colorScheme.error
+                                : null,
                       ),
                       child: Checkbox(
                         value: widget.taskEntry.status == TaskStatus.done,
@@ -188,7 +192,8 @@ class _TaskOverviewCardState extends State<TaskOverviewCard> with SingleTickerPr
                         ),
                       ),
                     ),
-                    if (widget.taskEntry.priority == TaskPriority.high) const Text('❗'),
+                    if (widget.taskEntry.priority == TaskPriority.high)
+                      const Text('❗'),
                     if (widget.taskEntry.priority == TaskPriority.low)
                       const Icon(
                         Icons.arrow_downward_outlined,
@@ -206,7 +211,8 @@ class _TaskOverviewCardState extends State<TaskOverviewCard> with SingleTickerPr
                       ),
                     ),
                     IconButton(
-                      onPressed: () => widget.onInfoPressed?.call(widget.taskEntry),
+                      onPressed: () =>
+                          widget.onInfoPressed?.call(widget.taskEntry),
                       icon: const Icon(Icons.info_outline),
                     ),
                   ],

@@ -1,4 +1,3 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
 import 'package:todo_app/isar_local_storage/domain/isar_task_entry.dart';
 import 'package:todo_app/local_storage/domain/crud_repository.dart';

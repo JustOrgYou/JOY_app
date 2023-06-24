@@ -83,7 +83,9 @@ class TasksOverview extends ConsumerWidget {
   void _onTaskCardDonePressed(WidgetRef ref, TaskEntry taskEntry) {
     ref.read(taskEntryServiceProvider).updateTaskEntry(
           taskEntry.copyWith(
-            status: taskEntry.status == TaskStatus.done ? TaskStatus.open : TaskStatus.done,
+            status: taskEntry.status == TaskStatus.done
+                ? TaskStatus.open
+                : TaskStatus.done,
           ),
         );
   }
@@ -126,7 +128,8 @@ class TasksOverview extends ConsumerWidget {
                 SliverTaskOverviewBar(
                   doneTasksCount: 3,
                   areDoneTasksVisible: areDoneTasksVisible,
-                  toggleVisibilityCallback: () => _onToggleVisibilityPressed(ref),
+                  toggleVisibilityCallback: () =>
+                      _onToggleVisibilityPressed(ref),
                 ),
 
                 /// task cards and "add new" button
@@ -144,12 +147,15 @@ class TasksOverview extends ConsumerWidget {
                             /// Task Cards
                             taskEntries
                                 .where(
-                                  (task) => areDoneTasksVisible || task.status != TaskStatus.done,
+                                  (task) =>
+                                      areDoneTasksVisible ||
+                                      task.status != TaskStatus.done,
                                 )
                                 .map<Widget>(
                                   (task) => TaskOverviewCard(
                                     taskEntry: task,
-                                    onDelete: (entry) => _onTaskCardDeletePressed(
+                                    onDelete: (entry) =>
+                                        _onTaskCardDeletePressed(
                                       ref,
                                       entry,
                                     ),
@@ -161,7 +167,8 @@ class TasksOverview extends ConsumerWidget {
                                       ref,
                                       entry,
                                     ),
-                                    onInfoPressed: (entry) => _onTaskCardPressed(
+                                    onInfoPressed: (entry) =>
+                                        _onTaskCardPressed(
                                       ref,
                                       entry,
                                     ),
@@ -174,7 +181,8 @@ class TasksOverview extends ConsumerWidget {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: TextButton(
-                                    onPressed: () => _onAddNewButtonPressed(ref),
+                                    onPressed: () =>
+                                        _onAddNewButtonPressed(ref),
                                     child: const Text('Новое'),
                                   ),
                                 ),

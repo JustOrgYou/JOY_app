@@ -58,7 +58,9 @@ class TaskEntryServiceMock implements TaskEntryService {
   @override
   Future<void> deleteTaskEntry(TaskEntry taskEntry) async {
     await Future<void>.delayed(Duration(milliseconds: delay));
-    _taskEntries.removeWhere((taskEntryElement) => taskEntryElement.id == taskEntry.id);
+    _taskEntries.removeWhere(
+      (taskEntryElement) => taskEntryElement.id == taskEntry.id,
+    );
     _taskEntriesStreamController.add(_taskEntries);
   }
 
