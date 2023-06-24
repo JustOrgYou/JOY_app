@@ -1,20 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/config/app_theme.dart';
-import 'package:todo_app/isar_local_storage/data/local_storage_isar.dart';
-import 'package:todo_app/local_storage/data/local_storage_provider.dart';
+import 'package:todo_app/config/setup.dart';
 import 'package:todo_app/tasks_overview/tasks_overview.dart';
-
-Future<List<Override>> setup() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  /// initialize local storage
-  final localStorage = LocalStorageIsar();
-  await localStorage.initialize();
-  return [
-    localStorageProvider.overrideWithValue(localStorage),
-  ];
-}
 
 void main() async {
   runApp(
