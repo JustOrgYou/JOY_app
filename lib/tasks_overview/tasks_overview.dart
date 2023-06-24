@@ -77,7 +77,7 @@ class TasksOverview extends ConsumerWidget {
   }
 
   void _onTaskCardDeletePressed(WidgetRef ref, TaskEntry taskEntry) {
-    ref.read(taskEntryServiceProvider).deleteTaskEntry(taskEntry.id);
+    ref.read(taskEntryServiceProvider).deleteTaskEntry(taskEntry);
   }
 
   void _onTaskCardDonePressed(WidgetRef ref, TaskEntry taskEntry) {

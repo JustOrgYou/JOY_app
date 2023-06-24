@@ -4,6 +4,6 @@ abstract class TaskEntryService {
   Future<List<TaskEntry>> getTaskEntries();
   Stream<List<TaskEntry>> getTaskEntriesStream();
   Future<void> updateTaskEntry(TaskEntry taskEntry);
-  Future<void> deleteTaskEntry(int id);
+  Future<void> deleteTaskEntry(TaskEntry id);
   Future<void> addTaskEntry(TaskEntry taskEntry);
 }
