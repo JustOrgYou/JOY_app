@@ -4,11 +4,12 @@ import 'package:todo_app/task_edit/utils/task_priority_to_human_string_extension
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 class TaskEditPriorityDropdown extends StatelessWidget {
-  final ValueNotifier<TaskPriority> choosedPriority;
   const TaskEditPriorityDropdown({
     required this.choosedPriority,
     super.key,
   });
+
+  final ValueNotifier<TaskPriority> choosedPriority;
 
   @override
   Widget build(BuildContext context) {
