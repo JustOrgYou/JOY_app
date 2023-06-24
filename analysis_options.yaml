@@ -64,3 +64,4 @@ linter:
     avoid_annotating_with_dynamic: false
     one_member_abstracts: false
     sort_pub_dependencies: false
+    comment_references: false
