@@ -16,8 +16,6 @@ abstract class CrudRepository<T> {
   /// get all items
   Future<List<T>> getAllItems();
 
-  Stream<List<T>> getAllItemsStream();
-
   /// delete all items
   Future<void> clearItems();
 }

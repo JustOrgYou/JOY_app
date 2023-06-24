@@ -1,9 +1,9 @@
 import 'package:isar/isar.dart';
 import 'package:todo_app/isar_local_storage/domain/isar_task_entry.dart';
-import 'package:todo_app/shared/domain/crud_repository.dart';
+import 'package:todo_app/shared/domain/streaming_crud_repository.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
-class IsarTaskEntrysRepository implements CrudRepository<TaskEntry> {
+class IsarTaskEntrysRepository implements StreamingCrudRepository<TaskEntry> {
   final Isar isar;
   Stream<List<TaskEntry>>? _stream;
 
