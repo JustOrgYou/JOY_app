@@ -1,4 +1,4 @@
-import 'package:todo_app/local_storage/domain/crud_repository.dart';
+import 'package:todo_app/shared/domain/crud_repository.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 abstract class LocalStorage {
