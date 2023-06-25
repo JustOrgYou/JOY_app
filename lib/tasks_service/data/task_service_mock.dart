@@ -68,4 +68,16 @@ class TaskEntryServiceMock implements TaskEntryService {
   Stream<List<TaskEntry>> getTaskEntriesStream() {
     return _taskEntriesStreamController.stream;
   }
+
+  @override
+  Future<void> deleteAllTaskEntries() async {
+    await Future<void>.delayed(Duration(milliseconds: delay));
+    _taskEntries.clear();
+    _taskEntriesStreamController.add(_taskEntries);
+  }
+
+  @override
+  Future<void> syncronizeTaskEntries() async {
+    await Future<void>.delayed(Duration(milliseconds: delay));
+  }
 }
