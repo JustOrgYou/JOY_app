@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:todo_app/local_storage/data/local_storage_provider.dart';
 import 'package:todo_app/network/domain/network_repository.dart';
 import 'package:todo_app/network_merger/data/network_tasks_repository_merger.dart';
 import 'package:todo_app/shared/data/config_providers.dart';
@@ -10,7 +12,7 @@ import 'package:todo_app/tasks_service/domain/task_entry.dart';
 final dioProvider = Provider<Dio>(
   (ref) {
     final appConfig = ref.watch(appConfigProvider);
-    return Dio(
+    final dio = Dio(
       BaseOptions(
         baseUrl: appConfig.baseUrl,
         connectTimeout: appConfig.connectTimeout,
@@ -21,18 +23,28 @@ final dioProvider = Provider<Dio>(
         },
       ),
     );
+    dio.interceptors.add(
+      PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+      ),
+    );
+    return dio;
   },
 );
 
-final networkTasksRepositoryMergerProvider =
-    Provider<NetworkRepository<TaskEntry>>(
-  (ref) {
+final networkTasksRepositoryProvider =
+    FutureProvider<NetworkRepository<TaskEntry>>(
+  (ref) async {
     final dio = ref.watch(dioProvider);
+    final settings = ref.watch(localStorageProvider).settings();
+
     return NetworkTasksRepositoryMerger(
       dio: dio,
-
-      /// TODO: get last known revision from db
-      lastKnownRevision: null,
+      lastKnownRevision: await settings.lastKnownRevision(),
+      saveRevision: (revision) async {
+        await settings.saveLastKnownRevision(revision);
+      },
     );
   },
 );

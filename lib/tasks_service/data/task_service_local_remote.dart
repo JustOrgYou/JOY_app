@@ -8,24 +8,23 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   final LocalStorage local;
 
   /// remote server api that sync data across devices
-  final NetworkRepository<TaskEntry> remote;
+  final NetworkRepository<TaskEntry>? remote;
 
   TaskEntryServiceLocalRemote({
     required this.remote,
     required this.local,
-    // required this.remote,
   });
 
   @override
   Future<void> addTaskEntry(TaskEntry taskEntry) async {
     await local.tasksRepository().createOne(taskEntry);
-    await remote.createOne(taskEntry);
+    await remote?.createOne(taskEntry);
   }
 
   @override
   Future<void> deleteTaskEntry(TaskEntry taskEntry) async {
     await local.tasksRepository().deleteOne(taskEntry);
-    await remote.deleteOne(taskEntry);
+    await remote?.deleteOne(taskEntry);
   }
 
   @override
@@ -41,21 +40,28 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   @override
   Future<void> updateTaskEntry(TaskEntry taskEntry) async {
     await local.tasksRepository().updateOne(taskEntry);
-    await remote.updateOne(taskEntry);
+    await remote?.updateOne(taskEntry);
   }
 
   @override
   Future<void> deleteAllTaskEntries() async {
     await local.tasksRepository().clearItems();
-    await remote.clearItems();
+    await remote?.clearItems();
   }
 
   /// currently syncronization is server responsibility and remote dominate over local.
   @override
   Future<void> syncronizeTaskEntries() async {
+    if (remote == null) {
+      return;
+    }
     final localTaskEntries = await local.tasksRepository().getAllItems();
-    await remote.patch(localTaskEntries);
-    final remoteItems = await remote.getAllItems();
+    if (localTaskEntries.isNotEmpty) {
+      await remote!.patch(localTaskEntries);
+    }
+    final remoteItems = await remote!.getAllItems();
+
+    /// TODO: add local merge here
     await local.tasksRepository().clearItems();
     await local.tasksRepository().createMany(remoteItems);
   }
