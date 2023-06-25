@@ -5,7 +5,6 @@ import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 class IsarTaskEntrysRepository implements LocalStorageRepository<TaskEntry> {
   final Isar isar;
-  Stream<List<TaskEntry>>? _stream;
 
   IsarTaskEntrysRepository({
     required this.isar,
@@ -64,16 +63,16 @@ class IsarTaskEntrysRepository implements LocalStorageRepository<TaskEntry> {
         .toList();
   }
 
+  /// In case of poor performance consider using collection observers instead of query observers.
   @override
   Stream<List<TaskEntry>> getAllItemsStream() {
-    _stream ??= isar.isarTaskEntrys.where().watch(fireImmediately: true).map(
+    return isar.isarTaskEntrys.where().watch(fireImmediately: true).map(
           (isarTaskEntrys) => isarTaskEntrys
               .map<TaskEntry>(
                 (isarTaskEntry) => isarTaskEntry.toTaskEntry(),
               )
               .toList(),
         );
-    return _stream!;
   }
 
   /// Isar trait creating and updating as a single transaction
