@@ -95,13 +95,41 @@ class TasksOverview extends ConsumerWidget {
     final taskEntriesSnapshot = ref.watch(taskEntryStreamProvider);
     final areDoneTasksVisible = ref.watch(doneTasksVisibilityProvider);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _onFabAddNewPressed(ref),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'syncronize',
+            onPressed: () {
+              ref.read(taskEntryServiceProvider).syncronizeTaskEntries();
+            },
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            child: Icon(
+              Icons.sync,
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
+          ),
+          FloatingActionButton(
+            heroTag: 'deleteAll',
+            onPressed: () {
+              ref.read(taskEntryServiceProvider).deleteAllTaskEntries();
+            },
+            backgroundColor: Theme.of(context).colorScheme.error,
+            child: Icon(
+              Icons.delete,
+              color: Theme.of(context).colorScheme.onError,
+            ),
+          ),
+          FloatingActionButton(
+            heroTag: 'addNew',
+            onPressed: () => _onFabAddNewPressed(ref),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            child: Icon(
+              Icons.add,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
+        ],
       ),
       body: taskEntriesSnapshot.when(
         /// error display
