@@ -1,4 +1,4 @@
-import 'package:todo_app/shared/domain/streaming_crud_repository.dart';
+import 'package:todo_app/local_storage/domain/local_storage_repository.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 abstract class LocalStorage {
@@ -7,5 +7,5 @@ abstract class LocalStorage {
   /// Concrete implementations may be tolerant to violation, but
   /// responsibility is fully on developer and may entail unexpected behavior.
   Future<void> initialize();
-  StreamingCrudRepository<TaskEntry> tasksRepository();
+  LocalStorageRepository<TaskEntry> tasksRepository();
 }
