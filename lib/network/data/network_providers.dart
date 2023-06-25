@@ -14,7 +14,8 @@ final dioProvider = Provider<Dio>(
         connectTimeout: appConfig.connectTimeout,
         receiveTimeout: appConfig.receiveTimeout,
         headers: <String, String>{
-          'Authorization': 'Bearer ${appConfig.authToken}',
+          /// token should include 'Bearer' or 'OAuth' prefix
+          'Authorization': appConfig.authToken,
         },
       ),
     );
