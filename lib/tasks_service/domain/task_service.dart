@@ -6,4 +6,6 @@ abstract class TaskEntryService {
   Future<void> updateTaskEntry(TaskEntry taskEntry);
   Future<void> deleteTaskEntry(TaskEntry id);
   Future<void> addTaskEntry(TaskEntry taskEntry);
+  Future<void> deleteAllTaskEntries();
+  Future<void> syncronizeTaskEntries();
 }
