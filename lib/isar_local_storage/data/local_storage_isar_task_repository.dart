@@ -12,7 +12,7 @@ class IsarTaskEntrysRepository implements LocalStorageRepository<TaskEntry> {
 
   @override
   Future<void> clearItems() async {
-    await isar.isarTaskEntrys.clear();
+    await isar.writeTxn(() => isar.isarTaskEntrys.clear());
   }
 
   /// Isar trait creating and updating as a single transaction
@@ -27,8 +27,8 @@ class IsarTaskEntrysRepository implements LocalStorageRepository<TaskEntry> {
 
   /// Isar trait creating and updating as a single transaction
   @override
-  Future<void> updateOne(TaskEntry item) async {
-    await isar.writeTxn<void>(
+  Future<int> updateOne(TaskEntry item) async {
+    return isar.writeTxn<int>(
       () => isar.isarTaskEntrys.put(
         IsarTaskEntry.fromTaskEntry(item),
       ),
@@ -37,7 +37,7 @@ class IsarTaskEntrysRepository implements LocalStorageRepository<TaskEntry> {
 
   @override
   Future<List<TaskEntry>> deleteMany(List<TaskEntry> items) async {
-    final ids = items.map((e) => e.id).toList();
+    final ids = items.map((e) => e.id!).toList();
     final deleted = await isar.isarTaskEntrys.getAll(ids);
     await isar.writeTxn(() => isar.isarTaskEntrys.deleteAll(ids));
     return deleted.nonNulls
@@ -49,7 +49,10 @@ class IsarTaskEntrysRepository implements LocalStorageRepository<TaskEntry> {
 
   @override
   Future<bool> deleteOne(TaskEntry item) async {
-    return isar.writeTxn<bool>(() => isar.isarTaskEntrys.delete(item.id));
+    if (item.id == null) {
+      return false;
+    }
+    return isar.writeTxn<bool>(() => isar.isarTaskEntrys.delete(item.id!));
   }
 
   @override
@@ -83,7 +86,7 @@ class IsarTaskEntrysRepository implements LocalStorageRepository<TaskEntry> {
 
   /// Isar trait creating and updating as a single transaction
   @override
-  Future<void> createOne(TaskEntry item) async {
-    await updateOne(item);
+  Future<int> createOne(TaskEntry item) async {
+    return updateOne(item);
   }
 }

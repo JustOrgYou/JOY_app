@@ -26,7 +26,7 @@ class IsarTaskEntry {
     priority = task.priority.name;
     status = task.status.name;
     dueDate = task.dueDate;
-    id = task.id;
+    id = task.id ?? Isar.autoIncrement;
   }
 
   /// Converts an [IsarTaskEntry] to a [TaskEntry].
