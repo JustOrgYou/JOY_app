@@ -39,7 +39,7 @@ class TaskEntryServiceMock implements TaskEntryService {
     );
     _taskEntries.add(
       taskEntry.copyWith(
-        id: _taskEntries.last.id + 1,
+        id: _taskEntries.last.id ?? 0 + 1,
       ),
     );
     _taskEntriesStreamController.add(_taskEntries);

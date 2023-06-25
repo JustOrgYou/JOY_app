@@ -20,7 +20,7 @@ mixin _$TaskEntry {
   TaskPriority get priority => throw _privateConstructorUsedError;
   TaskStatus get status => throw _privateConstructorUsedError;
   DateTime? get dueDate => throw _privateConstructorUsedError;
-  int get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TaskEntryCopyWith<TaskEntry> get copyWith =>
@@ -37,7 +37,7 @@ abstract class $TaskEntryCopyWith<$Res> {
       TaskPriority priority,
       TaskStatus status,
       DateTime? dueDate,
-      int id});
+      int? id});
 }
 
 /// @nodoc
@@ -57,7 +57,7 @@ class _$TaskEntryCopyWithImpl<$Res, $Val extends TaskEntry>
     Object? priority = null,
     Object? status = null,
     Object? dueDate = freezed,
-    Object? id = null,
+    Object? id = freezed,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -76,10 +76,10 @@ class _$TaskEntryCopyWithImpl<$Res, $Val extends TaskEntry>
           ? _value.dueDate
           : dueDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -96,7 +96,7 @@ abstract class _$$_TaskEntryCopyWith<$Res> implements $TaskEntryCopyWith<$Res> {
       TaskPriority priority,
       TaskStatus status,
       DateTime? dueDate,
-      int id});
+      int? id});
 }
 
 /// @nodoc
@@ -114,7 +114,7 @@ class __$$_TaskEntryCopyWithImpl<$Res>
     Object? priority = null,
     Object? status = null,
     Object? dueDate = freezed,
-    Object? id = null,
+    Object? id = freezed,
   }) {
     return _then(_$_TaskEntry(
       title: null == title
@@ -133,10 +133,10 @@ class __$$_TaskEntryCopyWithImpl<$Res>
           ? _value.dueDate
           : dueDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -149,7 +149,7 @@ class _$_TaskEntry extends _TaskEntry {
       required this.priority,
       required this.status,
       required this.dueDate,
-      this.id = 0})
+      this.id})
       : super._();
 
   @override
@@ -161,8 +161,7 @@ class _$_TaskEntry extends _TaskEntry {
   @override
   final DateTime? dueDate;
   @override
-  @JsonKey()
-  final int id;
+  final int? id;
 
   @override
   String toString() {
@@ -199,7 +198,7 @@ abstract class _TaskEntry extends TaskEntry {
       required final TaskPriority priority,
       required final TaskStatus status,
       required final DateTime? dueDate,
-      final int id}) = _$_TaskEntry;
+      final int? id}) = _$_TaskEntry;
   const _TaskEntry._() : super._();
 
   @override
@@ -211,7 +210,7 @@ abstract class _TaskEntry extends TaskEntry {
   @override
   DateTime? get dueDate;
   @override
-  int get id;
+  int? get id;
   @override
   @JsonKey(ignore: true)
   _$$_TaskEntryCopyWith<_$_TaskEntry> get copyWith =>
