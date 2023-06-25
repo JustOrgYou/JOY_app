@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:todo_app/local_storage/domain/local_storage.dart';
 import 'package:todo_app/network/domain/network_repository.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
@@ -10,6 +14,10 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   /// remote server api that sync data across devices
   final NetworkRepository<TaskEntry>? remote;
 
+  /// drop all requests while syncronization is in progress. ValueNotifier is used to track syncronization state
+  /// loggs but otherwise is unnecessary.
+  final ValueNotifier<bool> isSyncing = ValueNotifier(false);
+
   TaskEntryServiceLocalRemote({
     required this.remote,
     required this.local,
@@ -17,14 +25,16 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
 
   @override
   Future<void> addTaskEntry(TaskEntry taskEntry) async {
-    await local.tasksRepository().createOne(taskEntry);
-    await remote?.createOne(taskEntry);
+    final newItemId = await local.tasksRepository().createOne(taskEntry);
+    _unavaitedSafeNetworkCall(
+      () => remote?.createOne(taskEntry.copyWith(id: newItemId)),
+    );
   }
 
   @override
   Future<void> deleteTaskEntry(TaskEntry taskEntry) async {
     await local.tasksRepository().deleteOne(taskEntry);
-    await remote?.deleteOne(taskEntry);
+    _unavaitedSafeNetworkCall(() => remote?.deleteOne(taskEntry));
   }
 
   @override
@@ -40,29 +50,50 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   @override
   Future<void> updateTaskEntry(TaskEntry taskEntry) async {
     await local.tasksRepository().updateOne(taskEntry);
-    await remote?.updateOne(taskEntry);
+    _unavaitedSafeNetworkCall(() => remote?.updateOne(taskEntry));
   }
 
   @override
   Future<void> deleteAllTaskEntries() async {
     await local.tasksRepository().clearItems();
-    await remote?.clearItems();
+    _unavaitedSafeNetworkCall(remote?.clearItems);
   }
 
   /// currently syncronization is server responsibility and remote dominate over local.
   @override
   Future<void> syncronizeTaskEntries() async {
-    if (remote == null) {
+    if (remote == null || isSyncing.value) {
       return;
     }
+    isSyncing.value = true;
     final localTaskEntries = await local.tasksRepository().getAllItems();
-    if (localTaskEntries.isNotEmpty) {
-      await remote!.patch(localTaskEntries);
-    }
     final remoteItems = await remote!.getAllItems();
 
     /// TODO: add local merge here
+    if (localTaskEntries.isNotEmpty) {
+      await remote!.patch(localTaskEntries);
+    }
+
     await local.tasksRepository().clearItems();
     await local.tasksRepository().createMany(remoteItems);
+    isSyncing.value = false;
+  }
+
+  void _unavaitedSafeNetworkCall(FutureOr<void> Function()? function) {
+    /// since all requests are invalid, we can drop them while syncronization is in progress
+    if (isSyncing.value) {
+      return;
+    }
+
+    /// For development speedup here explicit dependency from concrete implementation of network repository
+    /// TODO: create app exception and handle them.
+    try {
+      function?.call();
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400 ||
+          e.response?.data == 'unsynchronized data') {
+        syncronizeTaskEntries();
+      }
+    }
   }
 }
