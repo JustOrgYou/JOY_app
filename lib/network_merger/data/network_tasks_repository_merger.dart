@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,22 +13,36 @@ import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 typedef _Json = Map<String, dynamic>;
 
-/// this class tends to behave like a local repository, but under the hood differences are significant.
-///
+/// Class implements [NetworkRepository] interface and uses [Dio] to communicate with server.
+/// Server is responsible for syncronization and revision management. Merge conflict are resolved by server.
 class NetworkTasksRepositoryMerger implements NetworkRepository<TaskEntry> {
   final Dio dio;
 
-  /// if we would log all syncronizations value notifier may become helpful. But it is
-  /// quite pointless otherwise.
+  /// Value notifier is used to track revision changes. It is also easy to log changes.
   ValueNotifier<int> revision;
+
+  /// Callback to save revision to local storage or any other place
+  void Function(int) saveRevision;
 
   NetworkTasksRepositoryMerger({
     required this.dio,
+    required this.saveRevision,
     int? lastKnownRevision,
-  }) : revision = ValueNotifier(lastKnownRevision ?? 0);
+  }) : revision = ValueNotifier(lastKnownRevision ?? 0) {
+    revision.addListener(() {
+      saveRevision(revision.value);
+    });
+  }
 
   @override
   Future<void> clearItems() async {
+    /// since I need correct revision and server api constructed in way that only possible to get revision
+    /// is to get list of items, we spent extra traffic just for one number
+    final response = await dio.get<_Json>('/list', options: _revisionHeader());
+    final parsedResponse = NetworkMergerListResponseDto.fromJson(
+      response.data!,
+    );
+    revision.value = parsedResponse.revision;
     await patch([]);
   }
 
@@ -42,10 +58,11 @@ class NetworkTasksRepositoryMerger implements NetworkRepository<TaskEntry> {
 
   @override
   Future<List<TaskEntry>> getAllItems() async {
-    final response = await dio.get<_Json>('/list');
+    final response = await dio.get<_Json>('/list', options: _revisionHeader());
     final parsedResponse = NetworkMergerListResponseDto.fromJson(
       response.data!,
     );
+    revision.value = parsedResponse.revision;
     return parsedResponse.list.map<TaskEntry>((e) => e.toTaskEntry()).toList();
   }
 
@@ -93,14 +110,16 @@ class NetworkTasksRepositoryMerger implements NetworkRepository<TaskEntry> {
   Options _revisionHeader() {
     return Options(
       headers: <String, String>{
+        /// This sting is strongly belongs to the server implementation, so moving it to app config is pointless,
+        /// since app is independent from server
         'X-Last-Known-Revision': revision.value.toString(),
       },
     );
   }
 
-  NetworkMergerTaskRequestDto _taskRequestDto(TaskEntry taskEntry) {
+  _Json _taskRequestDto(TaskEntry taskEntry) {
     return NetworkMergerTaskRequestDto(
       task: NetworkMergerTaskDto.fromTaskEntry(taskEntry),
-    );
+    ).toJson();
   }
 }

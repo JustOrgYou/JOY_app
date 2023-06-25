@@ -3,9 +3,12 @@ import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 part 'network_merger_task_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(
+  includeIfNull: false,
+  explicitToJson: true,
+)
 class NetworkMergerTaskDto {
-  final int id;
+  final String id;
   final String text;
   final String importance;
   final int? deadline;
@@ -16,7 +19,7 @@ class NetworkMergerTaskDto {
   @JsonKey(name: 'changed_at')
   final int changedAt;
   @JsonKey(name: 'last_updated_by')
-  final int lastUpdatedBy;
+  final String lastUpdatedBy;
 
   NetworkMergerTaskDto({
     required this.id,
@@ -32,17 +35,17 @@ class NetworkMergerTaskDto {
 
   NetworkMergerTaskDto.fromTaskEntry(
     TaskEntry taskEntry,
-  )   : id = taskEntry.id,
+  )   : id = taskEntry.id.toString(),
         text = taskEntry.title,
-        importance = taskEntry.priority.toString(),
+        importance = _convertTaskPriority(taskEntry.priority),
         deadline = taskEntry.dueDate == null
             ? null
             : taskEntry.dueDate!.millisecondsSinceEpoch ~/ 1000,
         done = taskEntry.status == TaskStatus.done,
         color = null,
-        createdAt = 0,
-        changedAt = 0,
-        lastUpdatedBy = 0;
+        createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        changedAt = DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        lastUpdatedBy = 'me';
 
   factory NetworkMergerTaskDto.fromJson(Map<String, dynamic> json) =>
       _$NetworkMergerTaskDtoFromJson(json);
@@ -71,11 +74,24 @@ class NetworkMergerTaskDto {
         : DateTime.fromMillisecondsSinceEpoch(deadline! * 1000);
 
     return TaskEntry(
-      id: id,
+      id: int.parse(id),
       dueDate: dueDate,
       priority: priority,
       status: status,
       title: text,
     );
+  }
+}
+
+String _convertTaskPriority(TaskPriority priority) {
+  switch (priority) {
+    case TaskPriority.low:
+      return 'low';
+    case TaskPriority.medium:
+      return 'basic';
+    case TaskPriority.high:
+      return 'important';
+    case TaskPriority.none:
+      return 'basic';
   }
 }

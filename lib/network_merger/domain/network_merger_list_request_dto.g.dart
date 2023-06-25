@@ -12,10 +12,12 @@ NetworkMergerListRequestDto _$NetworkMergerListRequestDtoFromJson(
       list: (json['list'] as List<dynamic>)
           .map((e) => NetworkMergerTaskDto.fromJson(e as Map<String, dynamic>))
           .toList(),
+      status: json['status'] as String? ?? 'ok',
     );
 
 Map<String, dynamic> _$NetworkMergerListRequestDtoToJson(
         NetworkMergerListRequestDto instance) =>
     <String, dynamic>{
       'list': instance.list.map((e) => e.toJson()).toList(),
+      'status': instance.status,
     };

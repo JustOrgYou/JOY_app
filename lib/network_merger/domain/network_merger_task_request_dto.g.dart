@@ -16,5 +16,5 @@ NetworkMergerTaskRequestDto _$NetworkMergerTaskRequestDtoFromJson(
 Map<String, dynamic> _$NetworkMergerTaskRequestDtoToJson(
         NetworkMergerTaskRequestDto instance) =>
     <String, dynamic>{
-      'element': instance.task,
+      'element': instance.task.toJson(),
     };

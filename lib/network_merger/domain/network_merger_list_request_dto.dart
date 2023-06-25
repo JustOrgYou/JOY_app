@@ -6,8 +6,11 @@ part 'network_merger_list_request_dto.g.dart';
 @JsonSerializable(explicitToJson: true)
 class NetworkMergerListRequestDto {
   final List<NetworkMergerTaskDto> list;
-  NetworkMergerListRequestDto({
+  final String status;
+
+  const NetworkMergerListRequestDto({
     required this.list,
+    this.status = 'ok',
   });
 
   factory NetworkMergerListRequestDto.fromJson(Map<String, dynamic> json) =>

@@ -1,12 +1,16 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:todo_app/network_merger/domain/network_merger_task_dto.dart';
 
 part 'network_merger_task_response_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(
+  explicitToJson: true,
+  includeIfNull: false,
+)
 class NetworkMergerTaskResponseDto {
   final String status;
   @JsonKey(name: 'element')
-  final NetworkMergerTaskResponseDto task;
+  final NetworkMergerTaskDto task;
   final int revision;
 
   NetworkMergerTaskResponseDto({

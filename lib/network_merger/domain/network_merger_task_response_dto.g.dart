@@ -10,7 +10,7 @@ NetworkMergerTaskResponseDto _$NetworkMergerTaskResponseDtoFromJson(
         Map<String, dynamic> json) =>
     NetworkMergerTaskResponseDto(
       status: json['status'] as String,
-      task: NetworkMergerTaskResponseDto.fromJson(
+      task: NetworkMergerTaskDto.fromJson(
           json['element'] as Map<String, dynamic>),
       revision: json['revision'] as int,
     );
@@ -19,6 +19,6 @@ Map<String, dynamic> _$NetworkMergerTaskResponseDtoToJson(
         NetworkMergerTaskResponseDto instance) =>
     <String, dynamic>{
       'status': instance.status,
-      'element': instance.task,
+      'element': instance.task.toJson(),
       'revision': instance.revision,
     };
