@@ -11,7 +11,7 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   });
   @override
   Future<void> addTaskEntry(TaskEntry taskEntry) async {
-    await local.tasksRepository().putOne(taskEntry);
+    await local.tasksRepository().createOne(taskEntry);
   }
 
   @override
@@ -31,6 +31,6 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
 
   @override
   Future<void> updateTaskEntry(TaskEntry taskEntry) async {
-    await local.tasksRepository().putOne(taskEntry);
+    await local.tasksRepository().updateOne(taskEntry);
   }
 }
