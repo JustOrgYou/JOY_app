@@ -1,4 +1,5 @@
 import 'package:todo_app/local_storage/domain/local_storage_repository.dart';
+import 'package:todo_app/local_storage/domain/local_storage_settings_repository.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 /// Local Storage is responsible for persistent app state management. To separete logic, independend
@@ -10,4 +11,5 @@ abstract class LocalStorage {
   /// responsibility is fully on developer and may entail unexpected behavior.
   Future<void> initialize();
   LocalStorageRepository<TaskEntry> tasksRepository();
+  LocalStorageSettingsRepository settings();
 }

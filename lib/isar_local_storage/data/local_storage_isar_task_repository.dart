@@ -6,6 +6,7 @@ import 'package:todo_app/tasks_service/domain/task_entry.dart';
 class IsarTaskEntrysRepository implements LocalStorageRepository<TaskEntry> {
   final Isar isar;
 
+
   IsarTaskEntrysRepository({
     required this.isar,
   });
