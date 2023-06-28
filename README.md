@@ -43,6 +43,6 @@ Changes mostly inder the hood
 ![edit](./docs/v1-edit-screen.png)
 
 ## Download links
-[V2 app](https://github.com/Demezy/todo_app/releases/download/v2_release/todo_v2)
+[V2 app](https://github.com/Demezy/todo_app/releases/download/release_v2/app-release.apk)
 [V1 app](https://github.com/Demezy/todo_app/releases/download/untagged-3ce9b9b2c5f4b54647ff/app-release.apk)
 
