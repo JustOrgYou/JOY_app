@@ -29,6 +29,7 @@ final dioProvider = Provider<Dio>(
         requestBody: true,
       ),
     );
+    // dio.interceptors.add(DioInterceptToCurl());
     return dio;
   },
 );
