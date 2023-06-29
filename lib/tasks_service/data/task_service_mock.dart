@@ -39,7 +39,7 @@ class TaskEntryServiceMock implements TaskEntryService {
     );
     _taskEntries.add(
       taskEntry.copyWith(
-        id: _taskEntries.last.id + 1,
+        id: _taskEntries.last.id ?? 0 + 1,
       ),
     );
     _taskEntriesStreamController.add(_taskEntries);
@@ -56,14 +56,28 @@ class TaskEntryServiceMock implements TaskEntryService {
   }
 
   @override
-  Future<void> deleteTaskEntry(int id) async {
+  Future<void> deleteTaskEntry(TaskEntry taskEntry) async {
     await Future<void>.delayed(Duration(milliseconds: delay));
-    _taskEntries.removeWhere((taskEntry) => taskEntry.id == id);
+    _taskEntries.removeWhere(
+      (taskEntryElement) => taskEntryElement.id == taskEntry.id,
+    );
     _taskEntriesStreamController.add(_taskEntries);
   }
 
   @override
   Stream<List<TaskEntry>> getTaskEntriesStream() {
     return _taskEntriesStreamController.stream;
+  }
+
+  @override
+  Future<void> deleteAllTaskEntries() async {
+    await Future<void>.delayed(Duration(milliseconds: delay));
+    _taskEntries.clear();
+    _taskEntriesStreamController.add(_taskEntries);
+  }
+
+  @override
+  Future<void> syncronizeTaskEntries() async {
+    await Future<void>.delayed(Duration(milliseconds: delay));
   }
 }

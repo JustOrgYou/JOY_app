@@ -9,7 +9,7 @@ class TaskEntry with _$TaskEntry {
     required TaskPriority priority,
     required TaskStatus status,
     required DateTime? dueDate,
-    @Default(0) int id,
+    int? id,
   }) = _TaskEntry;
 
   const TaskEntry._();
