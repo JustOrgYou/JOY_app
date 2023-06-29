@@ -93,7 +93,7 @@ class NetworkTasksRepositoryMerger implements NetworkRepository<TaskEntry> {
   }
 
   @override
-  Future<void> patch(List<TaskEntry> items) async {
+  Future<List<TaskEntry>> patch(List<TaskEntry> items) async {
     final response = await dio.patch<_Json>(
       '/list',
       options: _revisionHeader(),
@@ -105,6 +105,7 @@ class NetworkTasksRepositoryMerger implements NetworkRepository<TaskEntry> {
       response.data!,
     );
     revision.value = parsedResponse.revision;
+    return parsedResponse.list.map((taskDto) => taskDto.toTaskEntry()).toList();
   }
 
   Options _revisionHeader() {
