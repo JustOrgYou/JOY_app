@@ -9,16 +9,20 @@ class TaskEntry with _$TaskEntry {
     required TaskPriority priority,
     required TaskStatus status,
     required DateTime? dueDate,
+    required DateTime createDate,
+    required DateTime changedDate,
     int? id,
   }) = _TaskEntry;
 
   const TaskEntry._();
 
-  factory TaskEntry.empty() => const _TaskEntry(
+  factory TaskEntry.empty() => _TaskEntry(
         title: '',
         priority: TaskPriority.none,
         status: TaskStatus.open,
         dueDate: null,
+        changedDate: DateTime.now(),
+        createDate: DateTime.now(),
       );
 }
 

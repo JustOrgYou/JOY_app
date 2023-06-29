@@ -43,8 +43,8 @@ class NetworkMergerTaskDto {
             : taskEntry.dueDate!.millisecondsSinceEpoch ~/ 1000,
         done = taskEntry.status == TaskStatus.done,
         color = null,
-        createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000,
-        changedAt = DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        createdAt = _convertDateToUnix(taskEntry.createDate),
+        changedAt = _convertDateToUnix(taskEntry.changedDate),
         lastUpdatedBy = 'me';
 
   factory NetworkMergerTaskDto.fromJson(Map<String, dynamic> json) =>
@@ -69,9 +69,9 @@ class NetworkMergerTaskDto {
     }
 
     final status = done ? TaskStatus.done : TaskStatus.open;
-    final dueDate = deadline == null
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(deadline! * 1000);
+    final dueDate = deadline == null ? null : _convertDateFromUnix(deadline!);
+    final createDate = _convertDateFromUnix(createdAt);
+    final changedDate = _convertDateFromUnix(changedAt);
 
     return TaskEntry(
       id: int.parse(id),
@@ -79,6 +79,8 @@ class NetworkMergerTaskDto {
       priority: priority,
       status: status,
       title: text,
+      changedDate: changedDate,
+      createDate: createDate,
     );
   }
 }
@@ -94,4 +96,12 @@ String _convertTaskPriority(TaskPriority priority) {
     case TaskPriority.none:
       return 'basic';
   }
+}
+
+DateTime _convertDateFromUnix(int unixDate) {
+  return DateTime.fromMillisecondsSinceEpoch(unixDate * 1000);
+}
+
+int _convertDateToUnix(DateTime date) {
+  return date.millisecondsSinceEpoch ~/ 1000;
 }

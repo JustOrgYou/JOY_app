@@ -14,6 +14,8 @@ class TaskEntryServiceMock implements TaskEntryService {
       priority: TaskPriority.values[index % TaskPriority.values.length],
       status: TaskStatus.values[index % TaskStatus.values.length],
       dueDate: DateTime.now().add(Duration(days: index)),
+      createDate: DateTime.now(),
+      changedDate: DateTime.now(),
     ),
   );
   final _taskEntriesStreamController = StreamController<List<TaskEntry>>();
