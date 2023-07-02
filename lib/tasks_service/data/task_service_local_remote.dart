@@ -19,7 +19,10 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   /// loggs but otherwise is unnecessary.
   final ValueNotifier<bool> isSyncing = ValueNotifier(false);
 
+  final List<String> taskCategories;
+
   TaskEntryServiceLocalRemote({
+    required this.taskCategories,
     required this.remote,
     required this.local,
   });
@@ -54,6 +57,11 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
 
   @override
   Future<void> updateTaskEntry(TaskEntry taskEntrySrc) async {
+    if (taskEntrySrc.category != null &&
+        taskCategories.contains(taskEntrySrc.category)) {
+      // TODO: use app specific exception or return false?
+      throw Exception('Unknown category');
+    }
     final taskEntry = taskEntrySrc.copyWith(
       changedDate: DateTime.now(),
     );

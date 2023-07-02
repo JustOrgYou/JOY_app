@@ -22,6 +22,8 @@ mixin _$TaskEntry {
   DateTime? get dueDate => throw _privateConstructorUsedError;
   DateTime get createDate => throw _privateConstructorUsedError;
   DateTime get changedDate => throw _privateConstructorUsedError;
+  @Assert('category != ""', 'If no category null should be placed')
+  String? get category => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -41,6 +43,8 @@ abstract class $TaskEntryCopyWith<$Res> {
       DateTime? dueDate,
       DateTime createDate,
       DateTime changedDate,
+      @Assert('category != ""', 'If no category null should be placed')
+          String? category,
       int? id});
 }
 
@@ -63,6 +67,7 @@ class _$TaskEntryCopyWithImpl<$Res, $Val extends TaskEntry>
     Object? dueDate = freezed,
     Object? createDate = null,
     Object? changedDate = null,
+    Object? category = freezed,
     Object? id = freezed,
   }) {
     return _then(_value.copyWith(
@@ -90,6 +95,10 @@ class _$TaskEntryCopyWithImpl<$Res, $Val extends TaskEntry>
           ? _value.changedDate
           : changedDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -112,6 +121,8 @@ abstract class _$$_TaskEntryCopyWith<$Res> implements $TaskEntryCopyWith<$Res> {
       DateTime? dueDate,
       DateTime createDate,
       DateTime changedDate,
+      @Assert('category != ""', 'If no category null should be placed')
+          String? category,
       int? id});
 }
 
@@ -132,6 +143,7 @@ class __$$_TaskEntryCopyWithImpl<$Res>
     Object? dueDate = freezed,
     Object? createDate = null,
     Object? changedDate = null,
+    Object? category = freezed,
     Object? id = freezed,
   }) {
     return _then(_$_TaskEntry(
@@ -159,6 +171,10 @@ class __$$_TaskEntryCopyWithImpl<$Res>
           ? _value.changedDate
           : changedDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -177,6 +193,8 @@ class _$_TaskEntry extends _TaskEntry {
       required this.dueDate,
       required this.createDate,
       required this.changedDate,
+      @Assert('category != ""', 'If no category null should be placed')
+          this.category,
       this.id})
       : super._();
 
@@ -193,11 +211,14 @@ class _$_TaskEntry extends _TaskEntry {
   @override
   final DateTime changedDate;
   @override
+  @Assert('category != ""', 'If no category null should be placed')
+  final String? category;
+  @override
   final int? id;
 
   @override
   String toString() {
-    return 'TaskEntry(title: $title, priority: $priority, status: $status, dueDate: $dueDate, createDate: $createDate, changedDate: $changedDate, id: $id)';
+    return 'TaskEntry(title: $title, priority: $priority, status: $status, dueDate: $dueDate, createDate: $createDate, changedDate: $changedDate, category: $category, id: $id)';
   }
 
   @override
@@ -214,12 +235,14 @@ class _$_TaskEntry extends _TaskEntry {
                 other.createDate == createDate) &&
             (identical(other.changedDate, changedDate) ||
                 other.changedDate == changedDate) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
             (identical(other.id, id) || other.id == id));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, title, priority, status, dueDate,
-      createDate, changedDate, id);
+      createDate, changedDate, category, id);
 
   @JsonKey(ignore: true)
   @override
@@ -236,6 +259,8 @@ abstract class _TaskEntry extends TaskEntry {
       required final DateTime? dueDate,
       required final DateTime createDate,
       required final DateTime changedDate,
+      @Assert('category != ""', 'If no category null should be placed')
+          final String? category,
       final int? id}) = _$_TaskEntry;
   const _TaskEntry._() : super._();
 
@@ -251,6 +276,9 @@ abstract class _TaskEntry extends TaskEntry {
   DateTime get createDate;
   @override
   DateTime get changedDate;
+  @override
+  @Assert('category != ""', 'If no category null should be placed')
+  String? get category;
   @override
   int? get id;
   @override
