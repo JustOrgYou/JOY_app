@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/task_edit/utils/task_priority_to_color_extension.dart';
-import 'package:todo_app/task_edit/utils/task_priority_to_human_string_extension.dart';
-import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
-class TaskEditPriorityDropdown extends StatelessWidget {
-  const TaskEditPriorityDropdown({
-    required this.choosedPriority,
+class AppDropownButton<T> extends StatelessWidget {
+  final String title;
+  final List<T> items;
+  final String Function(T) itemToString;
+  final Color? Function(T)? itemToColor;
+
+  const AppDropownButton({
+    required this.choosedValue,
+    required this.title,
+    required this.items,
+    required this.itemToString,
     super.key,
+    this.itemToColor,
   });
 
-  final ValueNotifier<TaskPriority> choosedPriority;
+  final ValueNotifier<T> choosedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +23,21 @@ class TaskEditPriorityDropdown extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Важность',
+          title,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         DropdownButtonHideUnderline(
-          child: DropdownButton<TaskPriority>(
+          child: DropdownButton<T>(
             iconSize: 0,
-            value: choosedPriority.value,
-            items: TaskPriority.values
-                .map<DropdownMenuItem<TaskPriority>>(
+            value: choosedValue.value,
+            items: items
+                .map<DropdownMenuItem<T>>(
                   (priority) => DropdownMenuItem(
                     value: priority,
                     child: Text(
-                      priority.humanString(),
+                      itemToString(priority),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: priority.color(context),
+                            color: itemToColor?.call(priority),
                           ),
                     ),
                   ),
@@ -39,7 +45,7 @@ class TaskEditPriorityDropdown extends StatelessWidget {
                 .toList(),
             onChanged: (priority) {
               if (priority == null) return;
-              choosedPriority.value = priority;
+              choosedValue.value = priority;
             },
           ),
         ),
