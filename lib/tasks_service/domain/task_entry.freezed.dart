@@ -24,6 +24,7 @@ mixin _$TaskEntry {
   DateTime get changedDate => throw _privateConstructorUsedError;
   @Assert('category != ""', 'If no category null should be placed')
   String? get category => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -45,6 +46,7 @@ abstract class $TaskEntryCopyWith<$Res> {
       DateTime changedDate,
       @Assert('category != ""', 'If no category null should be placed')
           String? category,
+      String? description,
       int? id});
 }
 
@@ -68,6 +70,7 @@ class _$TaskEntryCopyWithImpl<$Res, $Val extends TaskEntry>
     Object? createDate = null,
     Object? changedDate = null,
     Object? category = freezed,
+    Object? description = freezed,
     Object? id = freezed,
   }) {
     return _then(_value.copyWith(
@@ -99,6 +102,10 @@ class _$TaskEntryCopyWithImpl<$Res, $Val extends TaskEntry>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as String?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -123,6 +130,7 @@ abstract class _$$_TaskEntryCopyWith<$Res> implements $TaskEntryCopyWith<$Res> {
       DateTime changedDate,
       @Assert('category != ""', 'If no category null should be placed')
           String? category,
+      String? description,
       int? id});
 }
 
@@ -144,6 +152,7 @@ class __$$_TaskEntryCopyWithImpl<$Res>
     Object? createDate = null,
     Object? changedDate = null,
     Object? category = freezed,
+    Object? description = freezed,
     Object? id = freezed,
   }) {
     return _then(_$_TaskEntry(
@@ -175,6 +184,10 @@ class __$$_TaskEntryCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as String?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -195,6 +208,7 @@ class _$_TaskEntry extends _TaskEntry {
       required this.changedDate,
       @Assert('category != ""', 'If no category null should be placed')
           this.category,
+      this.description,
       this.id})
       : super._();
 
@@ -214,11 +228,13 @@ class _$_TaskEntry extends _TaskEntry {
   @Assert('category != ""', 'If no category null should be placed')
   final String? category;
   @override
+  final String? description;
+  @override
   final int? id;
 
   @override
   String toString() {
-    return 'TaskEntry(title: $title, priority: $priority, status: $status, dueDate: $dueDate, createDate: $createDate, changedDate: $changedDate, category: $category, id: $id)';
+    return 'TaskEntry(title: $title, priority: $priority, status: $status, dueDate: $dueDate, createDate: $createDate, changedDate: $changedDate, category: $category, description: $description, id: $id)';
   }
 
   @override
@@ -237,12 +253,14 @@ class _$_TaskEntry extends _TaskEntry {
                 other.changedDate == changedDate) &&
             (identical(other.category, category) ||
                 other.category == category) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.id, id) || other.id == id));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, title, priority, status, dueDate,
-      createDate, changedDate, category, id);
+      createDate, changedDate, category, description, id);
 
   @JsonKey(ignore: true)
   @override
@@ -261,6 +279,7 @@ abstract class _TaskEntry extends TaskEntry {
       required final DateTime changedDate,
       @Assert('category != ""', 'If no category null should be placed')
           final String? category,
+      final String? description,
       final int? id}) = _$_TaskEntry;
   const _TaskEntry._() : super._();
 
@@ -279,6 +298,8 @@ abstract class _TaskEntry extends TaskEntry {
   @override
   @Assert('category != ""', 'If no category null should be placed')
   String? get category;
+  @override
+  String? get description;
   @override
   int? get id;
   @override

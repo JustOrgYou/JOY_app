@@ -10,6 +10,7 @@ class IsarTaskEntry {
   String? title;
   String? priority;
   String? status;
+  String? category;
   DateTime? dueDate;
   DateTime? createDate;
   DateTime? changedDate;
@@ -30,6 +31,7 @@ class IsarTaskEntry {
     dueDate = task.dueDate;
     createDate = task.changedDate;
     changedDate = task.changedDate;
+    category = task.category;
     id = task.id ?? Isar.autoIncrement;
   }
 
@@ -42,6 +44,7 @@ class IsarTaskEntry {
       dueDate: dueDate,
       createDate: createDate ?? DateTime.now(),
       changedDate: changedDate ?? DateTime.now(),
+      category: category,
       id: id,
     );
   }

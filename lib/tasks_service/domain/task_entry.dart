@@ -13,6 +13,7 @@ class TaskEntry with _$TaskEntry {
     required DateTime changedDate,
     @Assert('category != ""', 'If no category null should be placed')
     String? category,
+    String? description,
     int? id,
   }) = _TaskEntry;
 
