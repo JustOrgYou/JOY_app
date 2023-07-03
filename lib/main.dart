@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/config/app_theme.dart';
 import 'package:todo_app/config/setup.dart';
-import 'package:todo_app/tasks_overview/tasks_overview.dart';
+import 'package:todo_app/home_screen/home_screen.dart';
 
 void main() async {
   runApp(
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: const TasksOverview(),
+        home: const HomeScreen(),
       ),
     );
   }
