@@ -58,7 +58,7 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   @override
   Future<void> updateTaskEntry(TaskEntry taskEntrySrc) async {
     if (taskEntrySrc.category != null &&
-        taskCategories.contains(taskEntrySrc.category)) {
+        !taskCategories.contains(taskEntrySrc.category)) {
       // TODO: use app specific exception or return false?
       throw Exception('Unknown category');
     }
@@ -93,6 +93,11 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
     await local.tasksRepository().clearItems();
     await local.tasksRepository().createMany(remoteItems);
     isSyncing.value = false;
+  }
+
+  @override
+  Future<void> changeCategory(TaskEntry taskEntry, String? newCategory) async {
+    await updateTaskEntry(taskEntry.copyWith(category: newCategory));
   }
 
   void _unavaitedSafeNetworkCall(FutureOr<void> Function()? function) {

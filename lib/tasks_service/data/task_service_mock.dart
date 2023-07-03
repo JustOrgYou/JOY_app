@@ -82,4 +82,9 @@ class TaskEntryServiceMock implements TaskEntryService {
   Future<void> syncronizeTaskEntries() async {
     await Future<void>.delayed(Duration(milliseconds: delay));
   }
+
+  @override
+  Future<void> changeCategory(TaskEntry taskEntry, String newCategory) async {
+    await updateTaskEntry(taskEntry.copyWith(category: newCategory));
+  }
 }
