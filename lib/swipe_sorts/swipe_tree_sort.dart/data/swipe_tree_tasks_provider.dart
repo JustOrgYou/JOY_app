@@ -20,7 +20,7 @@ Future<TreeBranch<String>> swipeTreeTasks(Ref ref) async {
   // final maxDepth = (log(maxIndex) / log(4)).ceil();
 
   /// Composite do not care about leaf and branch, but for root node it us crucial
-  return constructTree(categories, 4);
+  return constructTree<String>(categories, 4);
 }
 
 /// TODO: move this somewhere else.
