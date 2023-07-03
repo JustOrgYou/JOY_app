@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/config/app_theme.dart';
 import 'package:todo_app/config/setup.dart';
 import 'package:todo_app/tasks_overview/tasks_overview.dart';
-import 'package:todo_app/email_password_login/email_password_login.dart';
 
 void main() async {
   runApp(
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: const EmailPasswordLogin(),
+        home: const TasksOverview(),
       ),
     );
   }
