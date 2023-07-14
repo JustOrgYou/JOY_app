@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:todo_app/generated/l10n.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_delete_button.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_due_date_widget.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_priority_dropdown.dart';
@@ -50,7 +51,7 @@ class TaskEdit extends HookWidget {
         actions: [
           TextButton(
             onPressed: onSaveTask,
-            child: const Text('СОХРАНИТЬ'),
+            child: Text(S.of(context).save),
           ),
         ],
       ),

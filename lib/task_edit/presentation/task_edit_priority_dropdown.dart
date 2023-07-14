@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/generated/l10n.dart';
 import 'package:todo_app/task_edit/utils/task_priority_to_color_extension.dart';
 import 'package:todo_app/task_edit/utils/task_priority_to_human_string_extension.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
@@ -17,7 +18,7 @@ class TaskEditPriorityDropdown extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Важность',
+          S.of(context).priority,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         DropdownButtonHideUnderline(
@@ -29,7 +30,7 @@ class TaskEditPriorityDropdown extends StatelessWidget {
                   (priority) => DropdownMenuItem(
                     value: priority,
                     child: Text(
-                      priority.humanString(),
+                      priority.humanString(context),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: priority.color(context),
                           ),

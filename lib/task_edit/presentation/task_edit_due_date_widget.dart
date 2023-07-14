@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/task_edit/utils/date_time_formatted_extension.dart';
+import 'package:intl/intl.dart';
+import 'package:todo_app/generated/l10n.dart';
 
 class TaskEditDueDateWidget extends StatelessWidget {
   const TaskEditDueDateWidget({
@@ -19,7 +20,7 @@ class TaskEditDueDateWidget extends StatelessWidget {
           children: [
             /// title
             Text(
-              'Сделать до',
+              S.of(context).deadline,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
 
@@ -52,7 +53,7 @@ class TaskEditDueDateWidget extends StatelessWidget {
         /// date display
         if (dueDate.value != null)
           Text(
-            dueDate.value!.formatted(),
+            DateFormat.yMMMd().format(dueDate.value!),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.primary,
                 ),

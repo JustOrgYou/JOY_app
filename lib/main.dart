@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/config/app_theme.dart';
 import 'package:todo_app/config/setup.dart';
 import 'package:todo_app/tasks_overview/tasks_overview.dart';
 import 'package:todo_app/email_password_login/email_password_login.dart';
+import 'package:todo_app/generated/l10n.dart';
+
 
 void main() async {
   runApp(
@@ -26,6 +29,19 @@ class MyApp extends StatelessWidget {
     return ProviderScope(
       overrides: overrides,
       child: MaterialApp(
+        localeResolutionCallback: (
+            locale,
+            supportedLocales,
+            ) {
+          return locale;
+        },
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         title: 'Flutter Demo',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
