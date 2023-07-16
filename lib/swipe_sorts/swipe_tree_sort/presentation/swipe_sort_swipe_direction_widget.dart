@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/domain/tree_composite.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/domain/tree_composite.dart';
 
 class SwipeSortSwipeDirectionWidget extends StatelessWidget {
   final TreeComposite<String> composite;

@@ -15,7 +15,7 @@ Future<TreeBranch<String>> swipeTreeTasks(Ref ref) async {
 
   final maxIndex = categories.length;
   if (maxIndex == 0) {
-    return const TreeComposite.branch([]) as TreeBranch<String>;
+    return const TreeComposite<String>.branch([]) as TreeBranch<String>;
   }
   // final maxDepth = (log(maxIndex) / log(4)).ceil();
 

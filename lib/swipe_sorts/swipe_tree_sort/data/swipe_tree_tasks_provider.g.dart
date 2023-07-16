@@ -6,7 +6,7 @@ part of 'swipe_tree_tasks_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$swipeTreeTasksHash() => r'68b88c0210d31ebfd447dc510f9b4494cbe27cae';
+String _$swipeTreeTasksHash() => r'ed5d4d7e4b5a9f926b222511edb4a521e38acabb';
 
 /// See also [swipeTreeTasks].
 @ProviderFor(swipeTreeTasks)

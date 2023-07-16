@@ -39,7 +39,10 @@ Future<Tuple2<TreeBranch<String>, List<TaskEntry>>> swipeSearchDetail(
 //     ),
 //   ];
 
-  return Tuple2(categories, tasks);
+  return Tuple2(
+    categories,
+    tasks.where((element) => element.category == null).toList(),
+  );
 }
 
 class SwipeTreeSort extends ConsumerWidget {
