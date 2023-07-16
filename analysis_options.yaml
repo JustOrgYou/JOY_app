@@ -16,16 +16,16 @@ dart_code_metrics:
     - '**/*.g.dart'
     - '**/generated_plugin_registrant.dart'
     - 'components/atol_flutter/**'
-    -  build/**
-    -  lib/generated
+    - 'build/**'
+    - 'lib/generated'
 
 analyzer:
   exclude:
     - '**/*.freezed.dart'
     - '**/*.g.dart'
     - '**/generated_plugin_registrant.dart'
-    -  build/**
-    -  lib/generated
+    - 'build/**'
+    - 'lib/generated'
   errors:
     invalid_annotation_target: ignore
     implementation_imports: ignore
