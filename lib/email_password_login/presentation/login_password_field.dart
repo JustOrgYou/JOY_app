@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/generated/l10n.dart';
+
 
 class LoginPasswordField extends StatelessWidget {
   final TextEditingController textEditingController;
@@ -11,9 +13,8 @@ class LoginPasswordField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: textEditingController,
-      decoration: const InputDecoration(
-        labelText: 'Password',
-
+      decoration: InputDecoration(
+        labelText: S.of(context).password,
       ),
 
     );

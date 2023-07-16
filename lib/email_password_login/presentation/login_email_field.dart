@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/generated/l10n.dart';
+
 
 class LoginEmailField extends StatelessWidget {
   final TextEditingController textEditingController;
@@ -11,8 +13,8 @@ class LoginEmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: textEditingController,
-      decoration: const InputDecoration(
-        labelText: 'Email',
+      decoration: InputDecoration(
+        labelText: S.of(context).email,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/generated/l10n.dart';
 
 class SliverTaskOverviewBar extends StatelessWidget {
   const SliverTaskOverviewBar({
@@ -22,11 +23,11 @@ class SliverTaskOverviewBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Мои дела',
+              S.of(context).todo,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-              'Выполнено - $doneTasksCount',
+              '${S.of(context).done} - $doneTasksCount',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
