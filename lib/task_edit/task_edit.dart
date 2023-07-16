@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todo_app/generated/l10n.dart';
 import 'package:todo_app/shared/presentation/app_dropdown_button.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_delete_button.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_due_date_widget.dart';
@@ -57,7 +58,7 @@ class TaskEdit extends HookConsumerWidget {
         actions: [
           TextButton(
             onPressed: onSaveTask,
-            child: const Text('СОХРАНИТЬ'),
+            child: Text(S.of(context).save),
           ),
         ],
       ),
@@ -75,9 +76,9 @@ class TaskEdit extends HookConsumerWidget {
             /// choose priority
             AppDropownButton<TaskPriority>(
               choosedValue: choosedPriority,
-              itemToString: (priority) => priority.humanString(),
+              itemToString: (priority) => priority.humanString(context),
               items: TaskPriority.values,
-              title: 'Важность',
+              title: S.of(context).priority,
               itemToColor: (priority) => priority.color(context),
             ),
             const TaskEditSeparatorWidget(),

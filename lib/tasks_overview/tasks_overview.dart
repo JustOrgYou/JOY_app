@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todo_app/generated/l10n.dart';
 import 'package:todo_app/task_edit/task_edit.dart';
 import 'package:todo_app/tasks_overview/presentation/sliver_task_overview_bar.dart';
 import 'package:todo_app/tasks_overview/presentation/task_overview_card.dart';
@@ -211,7 +212,7 @@ class TasksOverview extends ConsumerWidget {
                                   child: TextButton(
                                     onPressed: () =>
                                         _onAddNewButtonPressed(ref),
-                                    child: const Text('Новое'),
+                                    child: Text(S.of(context).new_),
                                   ),
                                 ),
                               ),

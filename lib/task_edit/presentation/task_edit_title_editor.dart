@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/generated/l10n.dart';
 
 class TaskEditTitleEditor extends StatelessWidget {
   const TaskEditTitleEditor({
@@ -16,7 +17,7 @@ class TaskEditTitleEditor extends StatelessWidget {
       controller: textEditingController,
       style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
-        hintText: 'Что надо сделать...',
+        hintText: S.of(context).st_to_do,
         border: InputBorder.none,
         fillColor: Theme.of(context).colorScheme.background,
         filled: true,
