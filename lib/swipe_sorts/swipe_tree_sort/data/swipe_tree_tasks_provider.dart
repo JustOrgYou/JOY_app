@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/domain/tree_composite.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/domain/tree_composite.dart';
 import 'package:todo_app/tasks_service/data/task_providers.dart';
 
 part 'swipe_tree_tasks_provider.g.dart';

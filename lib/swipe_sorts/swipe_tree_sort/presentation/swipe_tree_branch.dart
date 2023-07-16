@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/domain/tree_composite.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/presentation/rotated_arrow.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/presentation/swipe_sort_swipe_direction_widget.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/presentation/task_deck.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/domain/tree_composite.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/rotated_arrow.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/swipe_sort_swipe_direction_widget.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/task_deck.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
 import 'package:vector_math/vector_math_64.dart' as v;
 

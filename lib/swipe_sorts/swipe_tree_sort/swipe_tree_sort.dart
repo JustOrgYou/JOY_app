@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/data/swipe_tree_tasks_provider.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/domain/tree_composite.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/presentation/swipe_tree_branch.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/data/swipe_tree_tasks_provider.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/domain/tree_composite.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/swipe_tree_branch.dart';
 import 'package:todo_app/tasks_service/data/task_providers.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
 import 'package:tuple/tuple.dart';
