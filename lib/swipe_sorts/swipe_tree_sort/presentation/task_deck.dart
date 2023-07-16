@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort.dart/presentation/task_deck_card.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/task_deck_card.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
 class TaskDeck extends StatelessWidget {
