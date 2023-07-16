@@ -9,16 +9,23 @@ class TaskEntry with _$TaskEntry {
     required TaskPriority priority,
     required TaskStatus status,
     required DateTime? dueDate,
+    required DateTime createDate,
+    required DateTime changedDate,
+    @Assert('category != ""', 'If no category null should be placed')
+    String? category,
+    String? description,
     int? id,
   }) = _TaskEntry;
 
   const TaskEntry._();
 
-  factory TaskEntry.empty() => const _TaskEntry(
+  factory TaskEntry.empty() => _TaskEntry(
         title: '',
         priority: TaskPriority.none,
         status: TaskStatus.open,
         dueDate: null,
+        changedDate: DateTime.now(),
+        createDate: DateTime.now(),
       );
 }
 

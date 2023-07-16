@@ -8,4 +8,5 @@ abstract class TaskEntryService {
   Future<void> addTaskEntry(TaskEntry taskEntry);
   Future<void> deleteAllTaskEntries();
   Future<void> syncronizeTaskEntries();
+  Future<void> changeCategory(TaskEntry taskEntry, String newCategory);
 }

@@ -10,7 +10,10 @@ class IsarTaskEntry {
   String? title;
   String? priority;
   String? status;
+  String? category;
   DateTime? dueDate;
+  DateTime? createDate;
+  DateTime? changedDate;
 
   /// Default constructor.
   IsarTaskEntry({
@@ -26,6 +29,9 @@ class IsarTaskEntry {
     priority = task.priority.name;
     status = task.status.name;
     dueDate = task.dueDate;
+    createDate = task.changedDate;
+    changedDate = task.changedDate;
+    category = task.category;
     id = task.id ?? Isar.autoIncrement;
   }
 
@@ -36,6 +42,9 @@ class IsarTaskEntry {
       priority: TaskPriority.values.firstWhere((e) => e.name == priority),
       status: TaskStatus.values.firstWhere((e) => e.name == status),
       dueDate: dueDate,
+      createDate: createDate ?? DateTime.now(),
+      changedDate: changedDate ?? DateTime.now(),
+      category: category,
       id: id,
     );
   }

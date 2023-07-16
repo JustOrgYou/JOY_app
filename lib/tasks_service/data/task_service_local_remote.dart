@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:todo_app/local_storage/domain/local_storage.dart';
 import 'package:todo_app/network/domain/network_repository.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
@@ -18,13 +19,20 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   /// loggs but otherwise is unnecessary.
   final ValueNotifier<bool> isSyncing = ValueNotifier(false);
 
+  final List<String> taskCategories;
+
   TaskEntryServiceLocalRemote({
+    required this.taskCategories,
     required this.remote,
     required this.local,
   });
 
   @override
-  Future<void> addTaskEntry(TaskEntry taskEntry) async {
+  Future<void> addTaskEntry(TaskEntry taskEntrySrc) async {
+    final taskEntry = taskEntrySrc.copyWith(
+      changedDate: DateTime.now(),
+      createDate: DateTime.now(),
+    );
     final newItemId = await local.tasksRepository().createOne(taskEntry);
     _unavaitedSafeNetworkCall(
       () => remote?.createOne(taskEntry.copyWith(id: newItemId)),
@@ -48,7 +56,15 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
   }
 
   @override
-  Future<void> updateTaskEntry(TaskEntry taskEntry) async {
+  Future<void> updateTaskEntry(TaskEntry taskEntrySrc) async {
+    if (taskEntrySrc.category != null &&
+        !taskCategories.contains(taskEntrySrc.category)) {
+      // TODO: use app specific exception or return false?
+      throw Exception('Unknown category');
+    }
+    final taskEntry = taskEntrySrc.copyWith(
+      changedDate: DateTime.now(),
+    );
     await local.tasksRepository().updateOne(taskEntry);
     _unavaitedSafeNetworkCall(() => remote?.updateOne(taskEntry));
   }
@@ -67,16 +83,21 @@ class TaskEntryServiceLocalRemote implements TaskEntryService {
     }
     isSyncing.value = true;
     final localTaskEntries = await local.tasksRepository().getAllItems();
-    final remoteItems = await remote!.getAllItems();
+    var remoteItems = await remote!.getAllItems();
 
-    /// TODO: add local merge here
+    /// TODO: add local merge here since server handle deletion in strange way
     if (localTaskEntries.isNotEmpty) {
-      await remote!.patch(localTaskEntries);
+      remoteItems = await remote!.patch(localTaskEntries);
     }
 
     await local.tasksRepository().clearItems();
     await local.tasksRepository().createMany(remoteItems);
     isSyncing.value = false;
+  }
+
+  @override
+  Future<void> changeCategory(TaskEntry taskEntry, String? newCategory) async {
+    await updateTaskEntry(taskEntry.copyWith(category: newCategory));
   }
 
   void _unavaitedSafeNetworkCall(FutureOr<void> Function()? function) {
