@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort/swipe_tree_sort.dart';
 import 'package:todo_app/swipe_sorts/swipe_tree_sort/swipe_tree_sort_route.dart';
 import 'package:todo_app/tasks_overview/tasks_overview.dart';
 
