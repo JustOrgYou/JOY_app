@@ -34,7 +34,7 @@ const IsarSettingsEntrySchema = CollectionSchema(
   getId: _isarSettingsEntryGetId,
   getLinks: _isarSettingsEntryGetLinks,
   attach: _isarSettingsEntryAttach,
-  version: '3.1.0',
+  version: '3.1.0+1',
 );
 
 int _isarSettingsEntryEstimateSize(

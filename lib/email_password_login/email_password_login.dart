@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/auth_service/auth_providers.dart';
 import 'package:todo_app/email_password_login/presentation/login_email_field.dart';
 import 'package:todo_app/email_password_login/presentation/login_password_field.dart';
-import 'package:todo_app/tasks_overview/tasks_overview.dart';
 import 'package:todo_app/generated/l10n.dart';
+import 'package:todo_app/tasks_overview/tasks_overview.dart';
 
 class EmailPasswordLogin extends ConsumerStatefulWidget {
   const EmailPasswordLogin({Key? key}) : super(key: key);
 
   @override
-  _EmailPasswordLoginState createState() => _EmailPasswordLoginState();
+  ConsumerState<EmailPasswordLogin> createState() => _EmailPasswordLoginState();
 }
 
 class _EmailPasswordLoginState extends ConsumerState<EmailPasswordLogin> {

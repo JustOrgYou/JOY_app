@@ -45,7 +45,7 @@ abstract class $TaskEntryCopyWith<$Res> {
       DateTime createDate,
       DateTime changedDate,
       @Assert('category != ""', 'If no category null should be placed')
-          String? category,
+      String? category,
       String? description,
       int? id});
 }
@@ -129,7 +129,7 @@ abstract class _$$_TaskEntryCopyWith<$Res> implements $TaskEntryCopyWith<$Res> {
       DateTime createDate,
       DateTime changedDate,
       @Assert('category != ""', 'If no category null should be placed')
-          String? category,
+      String? category,
       String? description,
       int? id});
 }
@@ -207,7 +207,7 @@ class _$_TaskEntry extends _TaskEntry {
       required this.createDate,
       required this.changedDate,
       @Assert('category != ""', 'If no category null should be placed')
-          this.category,
+      this.category,
       this.description,
       this.id})
       : super._();
@@ -278,7 +278,7 @@ abstract class _TaskEntry extends TaskEntry {
       required final DateTime createDate,
       required final DateTime changedDate,
       @Assert('category != ""', 'If no category null should be placed')
-          final String? category,
+      final String? category,
       final String? description,
       final int? id}) = _$_TaskEntry;
   const _TaskEntry._() : super._();
