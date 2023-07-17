@@ -6,7 +6,7 @@ part of 'swipe_tree_sort.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$swipeSearchDetailHash() => r'2835a09160d365c6ebba48170e5b6c422a92068c';
+String _$swipeSearchDetailHash() => r'7c44dde061a7b2b497fdc2361c5ec4c3e13c95bd';
 
 /// don't think that this is ideal solution, probaly splitted providers will be better in case if
 /// we want to promt user to setup swipe tree. But now to reduce boilerplate approach is used

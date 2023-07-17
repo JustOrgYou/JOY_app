@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort/domain/tree_composite.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/data/tree_node_layout_extension.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/domain/tree_node.dart';
 import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/rotated_arrow.dart';
 import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/swipe_sort_swipe_direction_widget.dart';
 import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/task_deck.dart';
@@ -27,6 +28,7 @@ class SwipeTreeBranch extends StatefulWidget {
 class _SwipeTreeBranchState extends State<SwipeTreeBranch> {
   final _dragPosition = ValueNotifier(v.Vector2.zero());
   final _swipeTriggerLength = 70.0;
+  late final ValueNotifier<TreeBranch<String>> _currentBranch;
 
   double get _dragAngle =>
       -_dragPosition.value.angleToSigned(v.Vector2(1, 0)) + pi;
@@ -35,13 +37,13 @@ class _SwipeTreeBranchState extends State<SwipeTreeBranch> {
   @override
   void initState() {
     super.initState();
-    _dragPosition.addListener(() {
-      setState(() {});
-    });
+    void reload() => setState(() {});
+    _dragPosition.addListener(reload);
+    _currentBranch = ValueNotifier(widget.branch)..addListener(reload);
   }
 
   int _selectedSector() {
-    final sectorCount = widget.branch.children.length;
+    final sectorCount = _currentBranch.value.capacity;
     final choosedSectorRaw = (_dragAngle / (pi * 2) * sectorCount).round();
     // since range is [0, 2*pi] we should handle case when angle is 2*pi
     final choosedSector =
@@ -62,33 +64,28 @@ class _SwipeTreeBranchState extends State<SwipeTreeBranch> {
 
   Future<void> _onDragEnd() async {
     final choosedSector = _selectedSector();
-    final choosedChild = widget.branch.children[choosedSector];
+    final choosedChild = _currentBranch.value[choosedSector];
     final displacement = _displacement;
     _clearDisplacement();
     if (_isSwipeTooShort(displacement)) return;
 
-    await choosedChild.when<Future<void>>(
-      leaf: (value) async {
+    if (_currentBranch.value.directionType(choosedSector) ==
+        SwipeDirectionWidgetType.back) {
+      _currentBranch.value = _currentBranch.value.parent!;
+      return;
+    }
+    await choosedChild?.map<Future<void>>(
+      leaf: (leaf) async {
         widget.onActionChoosed(
           widget.tasks[0],
-          value,
+          leaf.value,
         );
       },
-      branch: (_) => Navigator.push<void>(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SwipeTreeBranch(
-            branch: choosedChild as TreeBranch<String>,
-            tasks: widget.tasks,
-            onActionChoosed: widget.onActionChoosed,
-          ),
-        ),
-      ),
-      empty: () async {},
-      back: () async =>
-          Navigator.canPop(context) ? Navigator.pop(context) : null,
+      branch: (branch) async =>
+          _currentBranch.value = choosedChild as TreeBranch<String>,
+      // empty: (_) async {},
+      // back: () async => _currentBranch.value = parent,
     );
-    // clear DragPosition
   }
 
   void _onDragUpdate(DragUpdateDetails details) {
@@ -128,23 +125,24 @@ class _SwipeTreeBranchState extends State<SwipeTreeBranch> {
               ),
 
               /// indicator where user could swipe
-              ...List<Widget>.generate(widget.branch.children.length, (index) {
-                final angle = pi * 2 / widget.branch.children.length * index;
-                return Align(
-                  alignment: Alignment(
-                    cos(angle),
-                    sin(angle),
-                  ),
-                  child: SwipeSortSwipeDirectionWidget(
-                    composite: widget.branch.children[index],
+              ...List<Widget>.generate(
+                _currentBranch.value.capacity,
+                (index) {
+                  final angle = pi * 2 / _currentBranch.value.capacity * index;
+                  final currentChild = _currentBranch.value[index];
+                  final directionType =
+                      _currentBranch.value.directionType(index);
+                  return SwipeSortSwipeDirectionWidget(
+                    value: currentChild?.value,
+                    type: directionType,
                     angle: angle,
                     scale: index == _selectedSector() &&
                             !_isSwipeTooShort(_displacement)
                         ? min(_displacement.length / _swipeTriggerLength, 3)
                         : 1,
-                  ),
-                );
-              }),
+                  );
+                },
+              ),
 
               /// invisible widget that will be used to detect swipes
               Draggable(

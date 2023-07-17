@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:todo_app/swipe_sorts/swipe_tree_sort/data/swipe_tree_tasks_provider.dart';
-import 'package:todo_app/swipe_sorts/swipe_tree_sort/domain/tree_composite.dart';
+import 'package:todo_app/swipe_sorts/swipe_tree_sort/domain/tree_node.dart';
 import 'package:todo_app/swipe_sorts/swipe_tree_sort/presentation/swipe_tree_branch.dart';
 import 'package:todo_app/tasks_service/data/task_providers.dart';
 import 'package:todo_app/tasks_service/domain/task_entry.dart';
@@ -39,7 +40,10 @@ Future<Tuple2<TreeBranch<String>, List<TaskEntry>>> swipeSearchDetail(
 //     ),
 //   ];
 
-  return Tuple2(categories, tasks);
+  return Tuple2(
+    categories,
+    tasks.where((element) => element.category == null).toList(),
+  );
 }
 
 class SwipeTreeSort extends ConsumerWidget {
@@ -54,6 +58,11 @@ class SwipeTreeSort extends ConsumerWidget {
       child: Scaffold(
         body: swipeSearchDetails.when(
           error: (error, stackTrace) {
+            // throw Exception([error, stackTrace]);
+            if (kDebugMode) {
+              print(error);
+              print(stackTrace);
+            }
             return Center(
               child: ListView(
                 children: [
@@ -77,6 +86,7 @@ class SwipeTreeSort extends ConsumerWidget {
               branch: data.item1,
               tasks: data.item2,
               onActionChoosed: (taskEntry, category) async {
+                // print(category);
                 await ref
                     .read(taskEntryServiceProvider)
                     .changeCategory(taskEntry, category);
