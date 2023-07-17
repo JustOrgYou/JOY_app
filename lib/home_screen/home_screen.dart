@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/ml_suggestions_screen/ml_suggestions_screen_route.dart';
 import 'package:todo_app/swipe_sorts/swipe_tree_sort/swipe_tree_sort_route.dart';
 import 'package:todo_app/tasks_overview/tasks_overview.dart';
 
@@ -16,6 +17,13 @@ class HomeScreen extends StatelessWidget {
               SwipeTreeSortRoute(),
             ),
             child: const Text('Swipe Tree Sort'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+              context,
+              MlSwipeTreeRoute(),
+            ),
+            child: const Text('ML screen'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.push(
