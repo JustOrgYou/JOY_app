@@ -2,6 +2,7 @@ import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:todo_app/ml_service/data/ml_service_provider.dart';
 import 'package:todo_app/ml_suggestions_screen/presentation/suggestion_card.dart';
 import 'package:todo_app/task_edit/task_edit.dart';
 import 'package:todo_app/tasks_service/data/task_providers.dart';
@@ -10,82 +11,15 @@ import 'package:todo_app/tasks_service/domain/task_entry.dart';
 part 'ml_suggestions_screen.g.dart';
 
 @riverpod
-Future<List<List<TaskEntry>>> suggestionsDetail(
-  Ref ref,
-) async {
-  // final tasks = await ref.watch(taskEntryStreamProvider.future);
-  final emptyTask = TaskEntry.empty();
-  final similarTasksA = [
-    emptyTask.copyWith(
-      title: 'task 1 title blah blah blah',
-      description: 'some short desription',
-    ),
-    emptyTask.copyWith(
-      title: 'task 2 title olla olla olla',
-      description: 'regular description with\nmultiple lines\nand line breaks',
-    ),
-    emptyTask.copyWith(
-      title: 'task 3 very long title blah blah blah olla olla olla',
-      description: '''
-lorem ipsum dolor sit amet, consectetur adipiscing elit,
-sed do eiusmod tempor incididunt ut labore et
-dolore magna aliqua. Ut enim ad minim veniam quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.''',
-    ),
-  ];
-
-  final similarTasksB = [
-    emptyTask.copyWith(
-      title: 'buy bread',
-      description: 'some short desription',
-    ),
-    emptyTask.copyWith(
-      title: 'buy tasty bread',
-      description: '''
-lorem ipsum dolor sit amet, consectetur adipiscing elit,
-sed do eiusmod tempor incididunt ut labore et
-dolore magna aliqua. Ut enim ad minim veniam quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.''',
-    ),
-  ];
-
-  final similarTasksC = [
-    emptyTask.copyWith(
-      title: 'find a girlfriend',
-      description: 'some short desription',
-    ),
-    emptyTask.copyWith(
-      title: '',
-      description: 'some short desription',
-    ),
-    emptyTask.copyWith(
-      title: 'task 1 title blah blah blah',
-      description: 'some short desription',
-    ),
-    emptyTask.copyWith(
-      title: 'task 1 title blah blah blah',
-      description: 'some short desription',
-    ),
-    emptyTask.copyWith(
-      title: 'task 2 title olla olla olla',
-      description: 'regular description with\nmultiple lines\nand line breaks',
-    ),
-    emptyTask.copyWith(
-      title: 'task 3 very long title blah blah blah olla olla olla',
-      description: '''
-lorem ipsum dolor sit amet, consectetur adipiscing elit,
-sed do eiusmod tempor incididunt ut labore et
-dolore magna aliqua. Ut enim ad minim veniam quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.''',
-    ),
-  ];
-
-  final suggestions = [similarTasksA, similarTasksB, similarTasksC];
-
+Future<List<List<TaskEntry>>> suggestionsDetail(Ref ref) async {
+  final tasks = await ref.watch(taskEntryStreamProvider.future);
+  final mlService = ref.watch(mlServiceProvider);
+  final similarTaskIds = await mlService.getSimilarTasksIds(tasks);
+  final suggestions = similarTaskIds.map((ids) {
+    return ids.map((id) => tasks.firstWhere((e) => e.id == id)).toList();
+  }).toList();
   return suggestions;
+  // return suggestions;
 }
 
 class MlSwipeTree extends ConsumerWidget {
