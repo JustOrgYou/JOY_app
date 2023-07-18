@@ -15,6 +15,7 @@ Future<List<Override>> setup() async {
   await dotenv.load();
   final appConfig = AppConfig(
     baseUrl: dotenv.env['BASE_URL']!,
+    mlUrl: dotenv.env['ML_URL']!,
     connectTimeout: Duration(
       seconds: int.parse(dotenv.env['CONNECT_TIMEOUT']!),
     ),
