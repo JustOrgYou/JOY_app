@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todo_app/generated/l10n.dart';
+import 'package:todo_app/shared/presentation/app_dropdown_button.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_delete_button.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_due_date_widget.dart';
-import 'package:todo_app/task_edit/presentation/task_edit_priority_dropdown.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_separator_widget.dart';
 import 'package:todo_app/task_edit/presentation/task_edit_title_editor.dart';
-import 'package:todo_app/tasks_overview/domain/task_entry.dart';
+import 'package:todo_app/task_edit/utils/task_priority_to_color_extension.dart';
+import 'package:todo_app/task_edit/utils/task_priority_to_human_string_extension.dart';
+import 'package:todo_app/tasks_service/data/task_providers.dart';
+import 'package:todo_app/tasks_service/domain/task_entry.dart';
 
-class TaskEdit extends HookWidget {
-  final TaskEntry taskEntry;
-  final void Function(TaskEntry deletedEntry)? onDelete;
-  final void Function(TaskEntry updatedEntry)? onEditComplete;
+class TaskEdit extends HookConsumerWidget {
   const TaskEdit({
     required this.taskEntry,
     this.onDelete,
@@ -18,16 +20,24 @@ class TaskEdit extends HookWidget {
     super.key,
   });
 
+  final TaskEntry taskEntry;
+  final void Function(TaskEntry deletedEntry)? onDelete;
+  final void Function(TaskEntry updatedEntry)? onEditComplete;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final entryTitleEdit = useTextEditingController(text: taskEntry.title);
     final choosedPriority = useState(taskEntry.priority);
+    final choosedCategory = useState(taskEntry.category);
     final dueDate = useState(taskEntry.dueDate);
-    onSaveTask() {
+    final categories = ref.watch(taskCategoriesProvider);
+
+    void onSaveTask() {
       final newEntry = taskEntry.copyWith(
         title: entryTitleEdit.text,
         priority: choosedPriority.value,
         dueDate: dueDate.value,
+        category: choosedCategory.value,
       );
       onEditComplete?.call(newEntry);
     }
@@ -47,13 +57,13 @@ class TaskEdit extends HookWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => onSaveTask(),
-            child: const Text('СОХРАНИТЬ'),
+            onPressed: onSaveTask,
+            child: Text(S.of(context).save),
           ),
         ],
       ),
 
-      /// content
+      /// conten
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
@@ -64,8 +74,22 @@ class TaskEdit extends HookWidget {
             ),
 
             /// choose priority
-            TaskEditPriorityDropdown(
-              choosedPriority: choosedPriority,
+            AppDropownButton<TaskPriority>(
+              choosedValue: choosedPriority,
+              itemToString: (priority) => priority.humanString(context),
+              items: TaskPriority.values,
+              title: S.of(context).priority,
+              itemToColor: (priority) => priority.color(context),
+            ),
+            const TaskEditSeparatorWidget(),
+
+            /// choose category
+            AppDropownButton<String?>(
+              choosedValue: choosedCategory,
+              itemToString: (category) => category ?? 'Без категории',
+              items: categories,
+              title: 'Category',
+              itemToColor: (_) => Colors.black,
             ),
             const TaskEditSeparatorWidget(),
 

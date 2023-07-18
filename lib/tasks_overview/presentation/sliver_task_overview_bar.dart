@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/generated/l10n.dart';
 
 class SliverTaskOverviewBar extends StatelessWidget {
-  final int doneTasksCount;
-  final bool areDoneTasksVisible;
-  final VoidCallback toggleVisibilityCallback;
   const SliverTaskOverviewBar({
     required this.doneTasksCount,
     required this.toggleVisibilityCallback,
     required this.areDoneTasksVisible,
     super.key,
   });
+
+  final int doneTasksCount;
+  final bool areDoneTasksVisible;
+  final VoidCallback toggleVisibilityCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +23,13 @@ class SliverTaskOverviewBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Мои дела',
+              S.of(context).todo,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-              'Выполнено - $doneTasksCount',
+              '${S.of(context).done} - $doneTasksCount',
               style: Theme.of(context).textTheme.bodySmall,
-            )
+            ),
           ],
         ),
       ),
